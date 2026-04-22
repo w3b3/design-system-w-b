@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>w-b.dev Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0e0e0e;
+  --bg2:#141414;
+  --fg:#f3f1ec;
+  --dim:rgba(243,241,236,0.35);
+  --dimmer:rgba(243,241,236,0.15);
+  --hair:rgba(243,241,236,0.08);
+  --accent:#d4a853;
+  --accent-dim:rgba(212,168,83,0.3);
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  --helv:Helvetica,"Helvetica Neue",Arial,sans-serif;
+}
+html{scroll-behavior:smooth;background:var(--bg);color:var(--fg);font-family:var(--helv)}
+body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* Layout */
+.page{max-width:1100px;margin:0 auto;padding:80px 40px 120px}
+.section{margin-bottom:120px;opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+.section.visible{opacity:1;transform:translateY(0)}
+
+/* Type */
+h1{font-family:var(--helv);font-weight:700;font-size:clamp(42px,6vw,72px);letter-spacing:-0.04em;line-height:1.0;margin-bottom:16px}
+h2{font-family:var(--helv);font-weight:700;font-size:clamp(24px,3.5vw,40px);letter-spacing:-0.03em;line-height:1.1;margin-bottom:32px}
+h3{font-family:var(--helv);font-weight:700;font-size:20px;letter-spacing:-0.02em;margin-bottom:16px}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.body{font-family:var(--helv);font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:var(--dim);max-width:680px}
+.body strong{color:var(--fg);font-weight:600}
+.mono{font-family:var(--mono);font-size:13px;letter-spacing:0.02em;color:var(--dim)}
+
+/* Divider */
+.divider{width:40px;height:1px;background:var(--dimmer);margin:0 0 32px 0}
+
+/* Swatches */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin:30px 0}
+.swatch{height:120px;border-radius:4px;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;position:relative;border:1px solid var(--hair)}
+.swatch-name{font-family:var(--mono);font-size:11px;letter-spacing:0.06em;margin-bottom:4px}
+.swatch-val{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:0.04em}
+
+/* Token table */
+.token-table{width:100%;border-collapse:collapse;margin:24px 0}
+.token-table th,.token-table td{text-align:left;padding:12px 16px;font-family:var(--mono);font-size:12px;border-bottom:1px solid var(--hair)}
+.token-table th{color:var(--dim);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:400}
+.token-table td{color:var(--fg)}
+.token-table td:nth-child(2){color:var(--dim)}
+.token-table td:nth-child(3){color:var(--dimmer)}
+.token-table .demo{display:inline-block;width:14px;height:14px;border-radius:2px;vertical-align:middle;margin-right:8px;border:1px solid var(--hair)}
+
+/* Type specimens */
+.specimen{margin:20px 0;padding:24px 0;border-bottom:1px solid var(--hair)}
+.specimen-meta{font-family:var(--mono);font-size:10px;color:var(--dimmer);letter-spacing:0.08em;margin-top:8px}
+
+/* Component cards */
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin:30px 0}
+.comp-card{border:1px solid var(--hair);background:var(--bg2);padding:0;overflow:hidden}
+.comp-preview{padding:30px;min-height:140px;display:flex;align-items:center;justify-content:center}
+.comp-meta{padding:16px 20px;border-top:1px solid var(--hair)}
+.comp-meta h4{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px}
+.comp-meta p{font-family:var(--mono);font-size:11px;color:var(--dimmer);line-height:1.4}
+
+/* Code blocks */
+.code-block{background:var(--bg2);border:1px solid var(--hair);padding:20px 24px;margin:20px 0;overflow-x:auto;font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--dim);white-space:pre}
+.code-block .comment{color:var(--dimmer)}
+.code-block .key{color:var(--fg)}
+.code-block .val{color:var(--accent)}
+
+/* Flow chain (component demo) */
+.flow-chain{display:flex;flex-direction:column;gap:0}
+.flow-step{display:flex;align-items:center;gap:16px;padding:14px 20px;border-left:2px solid var(--hair)}
+.flow-step .step-icon{width:32px;height:32px;border-radius:50%;background:var(--bg2);border:1px solid var(--dimmer);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--dim);flex-shrink:0}
+.flow-step .step-label{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.flow-step.highlight{border-left-color:var(--accent)}
+.flow-step.highlight .step-icon{border-color:var(--accent);color:var(--accent)}
+.flow-step.highlight .step-label{color:var(--accent)}
+
+/* Cards */
+.card{padding:24px;border:1px solid var(--hair);background:var(--bg2)}
+.card h4{font-family:var(--helv);font-weight:700;font-size:15px;letter-spacing:-0.01em;margin-bottom:10px}
+.card p{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.5}
+.card.accent-card{border-color:var(--accent-dim)}
+.card.accent-card h4{color:var(--accent)}
+
+/* Topo box */
+.topo-box{border:1px solid var(--hair);padding:24px;position:relative;margin:16px 0}
+.topo-box .topo-title{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--dimmer);position:absolute;top:-8px;left:16px;background:var(--bg);padding:0 8px}
+.topo-items{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.topo-item{font-family:var(--mono);font-size:11px;padding:5px 12px;border:1px solid var(--dimmer);color:var(--dim)}
+.topo-item.hot{border-color:var(--accent-dim);color:var(--accent)}
+
+/* Layers */
+.layers{display:flex;flex-direction:column;gap:0;max-width:500px}
+.layer{padding:18px 24px;border:1px solid var(--hair);border-bottom:none}
+.layer:last-child{border-bottom:1px solid var(--hair)}
+.layer-name{font-family:var(--helv);font-weight:700;font-size:14px;margin-bottom:4px}
+.layer-desc{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.layer.hot{border-color:var(--accent-dim)}
+.layer.hot .layer-name{color:var(--accent)}
+
+/* Maturity bar */
+.mat-level{display:flex;align-items:stretch;border-bottom:1px solid var(--hair)}
+.mat-num{width:50px;padding:16px 0;text-align:center;font-family:var(--helv);font-weight:700;font-size:24px;color:var(--dimmer);flex-shrink:0}
+.mat-content{padding:16px;flex:1}
+.mat-content h4{font-family:var(--helv);font-weight:700;font-size:14px;margin-bottom:4px}
+.mat-content p{font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.4}
+.mat-level.current .mat-num{color:var(--accent)}
+.mat-level.current{border-left:3px solid var(--accent)}
+
+/* Nodes */
+.node-row{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin:20px 0}
+.node{width:64px;height:64px;border-radius:50%;border:2px solid var(--fg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;letter-spacing:0.06em;text-transform:uppercase}
+.node.filled{background:var(--fg);color:var(--bg)}
+.node.accent{border-color:var(--accent);color:var(--accent)}
+.node-arrow{font-family:var(--mono);color:var(--dimmer);font-size:16px}
+
+/* Animation */
+.anim-demos{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;margin:24px 0}
+.anim-demo{border:1px solid var(--hair);padding:24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.anim-demo .dot{width:20px;height:20px;border-radius:50%;background:var(--fg)}
+.anim-demo .dot.breathe{animation:breathe 2s ease infinite}
+.anim-demo .dot.pulse-scale{animation:pulseScale 1.5s ease infinite}
+.anim-demo .dot.fade-in{animation:fadeSlideIn 1.5s ease infinite}
+.anim-demo span{font-family:var(--mono);font-size:10px;color:var(--dimmer);letter-spacing:0.08em;text-transform:uppercase}
+@keyframes breathe{0%,100%{opacity:0.3}50%{opacity:1}}
+@keyframes pulseScale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+@keyframes fadeSlideIn{0%{opacity:0;transform:translateY(10px)}30%{opacity:1;transform:translateY(0)}70%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-10px)}}
+
+/* Responsive */
+@media(max-width:768px){
+  .page{padding:60px 20px 80px}
+  .section{margin-bottom:80px}
+  .swatches{grid-template-columns:repeat(2,1fr)}
+  .comp-grid{grid-template-columns:1fr}
+}
+
+/* Copy button */
+.copy-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dimmer);background:none;border:1px solid var(--hair);padding:4px 10px;cursor:pointer;transition:all 0.2s}
+.copy-btn:hover{color:var(--fg);border-color:var(--dimmer)}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- Header -->
+<section class="section" id="hero">
+  <div class="label">Design System // w-b.dev</div>
+  <h1>Visual Language</h1>
+  <p class="body" style="margin-top:16px">The shared design tokens, typography, components, and animation patterns used across all <strong>w-b.dev</strong> hotsites. Dark monochrome. Helvetica + JetBrains Mono. One accent color. Scroll-driven.</p>
+  <p class="mono" style="margin-top:24px">Reference implementation: <a href="https://pipeline-deep-dive.w-b.dev" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-dim)">pipeline-deep-dive.w-b.dev</a></p>
+</section>
+
+<!-- ═══ TOKENS ═══ -->
+<section class="section" id="tokens">
+  <div class="label">01 // Color Tokens</div>
+  <div class="divider"></div>
+  <h2>Palette</h2>
+  <p class="body">A dark monochrome base with a single warm accent. Hierarchy is built through <strong>opacity</strong>, not hue variation. The foreground color <code style="font-family:var(--mono);font-size:14px;color:var(--accent)">#f3f1ec</code> is warm paper — never pure white.</p>
+
+  <div class="swatches">
+    <div class="swatch" style="background:var(--bg)"><div class="swatch-name" style="color:var(--fg)">--bg</div><div class="swatch-val">#0e0e0e</div></div>
+    <div class="swatch" style="background:var(--bg2)"><div class="swatch-name" style="color:var(--fg)">--bg2</div><div class="swatch-val">#141414</div></div>
+    <div class="swatch" style="background:var(--fg)"><div class="swatch-name" style="color:var(--bg)">--fg</div><div class="swatch-val" style="color:rgba(14,14,14,0.5)">#f3f1ec</div></div>
+    <div class="swatch" style="background:rgba(243,241,236,0.35)"><div class="swatch-name" style="color:var(--bg)">--dim</div><div class="swatch-val" style="color:var(--bg)">fg @ 0.35</div></div>
+    <div class="swatch" style="background:rgba(243,241,236,0.15)"><div class="swatch-name">--dimmer</div><div class="swatch-val">fg @ 0.15</div></div>
+    <div class="swatch" style="background:rgba(243,241,236,0.08)"><div class="swatch-name">--hair</div><div class="swatch-val">fg @ 0.08</div></div>
+    <div class="swatch" style="background:var(--accent)"><div class="swatch-name" style="color:var(--bg)">--accent</div><div class="swatch-val" style="color:rgba(14,14,14,0.6)">#d4a853</div></div>
+    <div class="swatch" style="background:var(--accent-dim)"><div class="swatch-name">--accent-dim</div><div class="swatch-val">accent @ 0.3</div></div>
+  </div>
+
+  <h3 style="margin-top:50px">Opacity Ladder</h3>
+  <p class="body">The core design principle: <strong>never introduce a new hue</strong>. Use the opacity ladder to create depth.</p>
+  <table class="token-table">
+    <tr><th>Token</th><th>Opacity</th><th>Use</th></tr>
+    <tr><td><span class="demo" style="background:var(--fg)"></span>--fg</td><td>1.0</td><td>Headlines, primary text, filled circles</td></tr>
+    <tr><td><span class="demo" style="background:var(--dim)"></span>--dim</td><td>0.35</td><td>Body text, labels, secondary content</td></tr>
+    <tr><td><span class="demo" style="background:var(--dimmer)"></span>--dimmer</td><td>0.15</td><td>Timestamps, meta labels, step icons, borders</td></tr>
+    <tr><td><span class="demo" style="background:var(--hair)"></span>--hair</td><td>0.08</td><td>Subtle borders, section dividers, card edges</td></tr>
+    <tr><td><span class="demo" style="background:var(--accent)"></span>--accent</td><td>1.0</td><td>Highlights, alerts, active states, CTAs</td></tr>
+    <tr><td><span class="demo" style="background:var(--accent-dim)"></span>--accent-dim</td><td>0.3</td><td>Accent borders, hover states</td></tr>
+  </table>
+
+  <div class="code-block"><span class="comment">/* Copy-paste CSS custom properties */</span>
+<span class="key">:root</span> {
+  <span class="key">--bg</span>: <span class="val">#0e0e0e</span>;
+  <span class="key">--bg2</span>: <span class="val">#141414</span>;
+  <span class="key">--fg</span>: <span class="val">#f3f1ec</span>;
+  <span class="key">--dim</span>: <span class="val">rgba(243,241,236,0.35)</span>;
+  <span class="key">--dimmer</span>: <span class="val">rgba(243,241,236,0.15)</span>;
+  <span class="key">--hair</span>: <span class="val">rgba(243,241,236,0.08)</span>;
+  <span class="key">--accent</span>: <span class="val">#d4a853</span>;
+  <span class="key">--accent-dim</span>: <span class="val">rgba(212,168,83,0.3)</span>;
+  <span class="key">--mono</span>: <span class="val">"JetBrains Mono", ui-monospace, monospace</span>;
+  <span class="key">--helv</span>: <span class="val">Helvetica, "Helvetica Neue", Arial, sans-serif</span>;
+}</div>
+</section>
+
+<!-- ═══ TYPOGRAPHY ═══ -->
+<section class="section" id="typography">
+  <div class="label">02 // Typography</div>
+  <div class="divider"></div>
+  <h2>Two Faces, One Voice</h2>
+  <p class="body"><strong>Helvetica</strong> for display and narrative. <strong>JetBrains Mono</strong> for data, labels, code, and metadata. No other typefaces. Ever.</p>
+
+  <div class="specimen">
+    <div style="font-family:var(--helv);font-weight:700;font-size:clamp(42px,6vw,72px);letter-spacing:-0.04em;line-height:1.0">Display / H1</div>
+    <div class="specimen-meta">Helvetica 700 &middot; clamp(42px, 6vw, 72px) &middot; -0.04em &middot; line-height 1.0</div>
+  </div>
+  <div class="specimen">
+    <div style="font-family:var(--helv);font-weight:700;font-size:clamp(24px,3.5vw,40px);letter-spacing:-0.03em;line-height:1.1">Section Heading / H2</div>
+    <div class="specimen-meta">Helvetica 700 &middot; clamp(24px, 3.5vw, 40px) &middot; -0.03em &middot; line-height 1.1</div>
+  </div>
+  <div class="specimen">
+    <div style="font-family:var(--helv);font-weight:700;font-size:clamp(18px,2.5vw,28px);letter-spacing:-0.02em;line-height:1.2">Subsection / H3</div>
+    <div class="specimen-meta">Helvetica 700 &middot; clamp(18px, 2.5vw, 28px) &middot; -0.02em &middot; line-height 1.2</div>
+  </div>
+  <div class="specimen">
+    <div style="font-family:var(--helv);font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:var(--dim);max-width:600px">Body text uses the dim color for comfortable long-form reading against the dark background. <strong style="color:var(--fg)">Bold spans</strong> promote to full foreground for emphasis.</div>
+    <div class="specimen-meta">Helvetica 400 &middot; clamp(16px, 1.6vw, 19px) &middot; color: --dim &middot; max-width 680px &middot; line-height 1.65</div>
+  </div>
+  <div class="specimen">
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim)">Section Label // Overline</div>
+    <div class="specimen-meta">JetBrains Mono 400 &middot; 11px &middot; 0.18em tracking &middot; uppercase &middot; color: --dim</div>
+  </div>
+  <div class="specimen">
+    <div style="font-family:var(--mono);font-size:13px;letter-spacing:0.02em;color:var(--dim)">Mono body &mdash; data values, descriptions, metadata fields</div>
+    <div class="specimen-meta">JetBrains Mono 400 &middot; 13px &middot; 0.02em tracking &middot; color: --dim</div>
+  </div>
+  <div class="specimen" style="border-bottom:none">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--dimmer)">Tertiary Meta Label</div>
+    <div class="specimen-meta">JetBrains Mono 400 &middot; 10px &middot; 0.16em tracking &middot; uppercase &middot; color: --dimmer</div>
+  </div>
+
+  <h3 style="margin-top:40px">Rules</h3>
+  <table class="token-table">
+    <tr><th>Principle</th><th>Detail</th></tr>
+    <tr><td>Negative tracking for display</td><td>H1: -0.04em, H2: -0.03em, H3: -0.02em. Tighter = larger.</td></tr>
+    <tr><td>Positive tracking for labels</td><td>Mono labels: +0.08em to +0.28em. Wider = smaller.</td></tr>
+    <tr><td>Clamp everything</td><td>All display sizes use clamp() for fluid responsiveness. No breakpoints for type.</td></tr>
+    <tr><td>body max-width: 680px</td><td>Long-form paragraphs never exceed 680px. Readability over width.</td></tr>
+  </table>
+</section>
+
+<!-- ═══ SPACING ═══ -->
+<section class="section" id="spacing">
+  <div class="label">03 // Spacing &amp; Layout</div>
+  <div class="divider"></div>
+  <h2>Generous Emptiness</h2>
+  <p class="body">Whitespace is a feature, not waste. Sections breathe. Content clusters are separated by 50&ndash;60px. Page sections use 120px vertical margin.</p>
+
+  <table class="token-table">
+    <tr><th>Context</th><th>Value</th><th>Use</th></tr>
+    <tr><td>Section padding</td><td>120px 60px (desktop), 80px 24px (mobile)</td><td>Full-height scroll sections</td></tr>
+    <tr><td>Narrow container</td><td>max-width: 900px</td><td>Text-heavy sections</td></tr>
+    <tr><td>Wide container</td><td>max-width: 1400px</td><td>Grid layouts, side-by-side comparisons</td></tr>
+    <tr><td>Section gap</td><td>120px (desktop), 80px (mobile)</td><td>Between major content sections</td></tr>
+    <tr><td>Component gap</td><td>50&ndash;60px</td><td>Between diagram/component and surrounding text</td></tr>
+    <tr><td>Card padding</td><td>24&ndash;28px</td><td>Interior of cards, panels, boxes</td></tr>
+    <tr><td>Grid gap</td><td>24px</td><td>Between cards in a grid</td></tr>
+    <tr><td>Element stagger</td><td>0.1&ndash;0.15s per item</td><td>Scroll-in animation delay per child</td></tr>
+  </table>
+</section>
+
+<!-- ═══ COMPONENTS ═══ -->
+<section class="section" id="components">
+  <div class="label">04 // Components</div>
+  <div class="divider"></div>
+  <h2>Building Blocks</h2>
+  <p class="body">Every w-b.dev page is assembled from these primitives. Each component follows the same reveal pattern: <strong>hidden by default</strong>, fades + slides in when its section enters the viewport.</p>
+
+  <div class="comp-grid" style="margin-top:50px">
+    <!-- Flow Chain -->
+    <div class="comp-card">
+      <div class="comp-preview">
+        <div class="flow-chain" style="width:100%">
+          <div class="flow-step"><div class="step-icon">1</div><div class="step-label">First step</div></div>
+          <div class="flow-step"><div class="step-icon">2</div><div class="step-label">Second step</div></div>
+          <div class="flow-step highlight"><div class="step-icon">!</div><div class="step-label" style="color:var(--accent)">Highlight step</div></div>
+        </div>
+      </div>
+      <div class="comp-meta"><h4>Flow Chain</h4><p>Vertical sequence of steps. Border-left guides the eye. `.highlight` for emphasis.</p></div>
+    </div>
+
+    <!-- Card -->
+    <div class="comp-card">
+      <div class="comp-preview">
+        <div style="display:flex;gap:14px;width:100%">
+          <div class="card" style="flex:1"><h4>Default Card</h4><p>Content in --dim mono</p></div>
+          <div class="card accent-card" style="flex:1"><h4>Accent Card</h4><p>Highlighted variant</p></div>
+        </div>
+      </div>
+      <div class="comp-meta"><h4>Cards</h4><p>Border --hair, bg --bg2. `.accent-card` for emphasis with --accent-dim border.</p></div>
+    </div>
+
+    <!-- Topo Box -->
+    <div class="comp-card">
+      <div class="comp-preview">
+        <div class="topo-box" style="width:100%">
+          <div class="topo-title">Category</div>
+          <div class="topo-items">
+            <div class="topo-item">Default</div>
+            <div class="topo-item hot">Hot item</div>
+            <div class="topo-item">Another</div>
+          </div>
+        </div>
+      </div>
+      <div class="comp-meta"><h4>Topology Box</h4><p>Floating label, tag pills inside. `.hot` for accent items.</p></div>
+    </div>
+
+    <!-- Layers -->
+    <div class="comp-card">
+      <div class="comp-preview">
+        <div class="layers" style="width:100%">
+          <div class="layer hot"><div class="layer-name">Hot Layer</div><div class="layer-desc">Most important</div></div>
+          <div class="layer"><div class="layer-name">Cold Layer</div><div class="layer-desc">Supporting</div></div>
+        </div>
+      </div>
+      <div class="comp-meta"><h4>Stacked Layers</h4><p>Vertical stack with shared borders. `.hot` promotes with accent.</p></div>
+    </div>
+
+    <!-- Maturity Bar -->
+    <div class="comp-card">
+      <div class="comp-preview">
+        <div style="width:100%">
+          <div class="mat-level current"><div class="mat-num">1</div><div class="mat-content"><h4>Active</h4><p>Current state</p></div></div>
+          <div class="mat-level"><div class="mat-num">2</div><div class="mat-content"><h4>Next</h4><p>Upcoming</p></div></div>
+        </div>
+      </div>
+      <div class="comp-meta"><h4>Maturity / Progress</h4><p>Numbered levels. `.current` highlights with accent bar.</p></div>
+    </div>
+
+    <!-- Nodes -->
+    <div class="comp-card">
+      <div class="comp-preview">
+        <div class="node-row">
+          <div class="node">SRC</div>
+          <div class="node-arrow">&rarr;</div>
+          <div class="node filled">PROC</div>
+          <div class="node-arrow">&rarr;</div>
+          <div class="node accent">OUT</div>
+        </div>
+      </div>
+      <div class="comp-meta"><h4>Pipeline Nodes</h4><p>Circle nodes. Outlined, `.filled` (inverted), `.accent` (highlighted).</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ANIMATION ═══ -->
+<section class="section" id="animation">
+  <div class="label">05 // Animation</div>
+  <div class="divider"></div>
+  <h2>Scroll-Driven, Never Gratuitous</h2>
+  <p class="body">All animation is triggered by <strong>IntersectionObserver</strong>. No libraries. Elements start hidden (<code style="font-family:var(--mono);color:var(--accent)">opacity:0; transform:translateY(30px)</code>) and reveal when their section enters the viewport.</p>
+
+  <div class="anim-demos">
+    <div class="anim-demo"><div class="dot breathe"></div><span>Breathe</span></div>
+    <div class="anim-demo"><div class="dot pulse-scale"></div><span>Pulse Scale</span></div>
+    <div class="anim-demo"><div class="dot fade-in"></div><span>Fade Slide In</span></div>
+  </div>
+
+  <h3 style="margin-top:40px">Patterns</h3>
+  <table class="token-table">
+    <tr><th>Pattern</th><th>CSS</th><th>When</th></tr>
+    <tr><td>Section reveal</td><td>opacity 0.7-0.8s + translateY(30-40px)</td><td>Every section entering viewport</td></tr>
+    <tr><td>Child stagger</td><td>transition-delay: nth-child * 0.1-0.15s</td><td>Cards, steps, list items</td></tr>
+    <tr><td>Breathe</td><td>opacity 0.3&rarr;1 over 2s, infinite</td><td>Subtle ambient pulse on idle elements</td></tr>
+    <tr><td>Draw-in (SVG)</td><td>stroke-dashoffset 1000&rarr;0 over 1.2s</td><td>Diagram edges appearing</td></tr>
+    <tr><td>Scale-in (nodes)</td><td>scale(0.5)&rarr;scale(1) + opacity over 0.6s</td><td>Circle nodes popping in</td></tr>
+  </table>
+
+  <div class="code-block"><span class="comment">/* Scroll-driven reveal — the only JS needed */</span>
+
+<span class="key">const</span> observer = <span class="key">new</span> IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    <span class="key">if</span> (entry.isIntersecting)
+      entry.target.classList.add(<span class="val">'visible'</span>);
+  });
+}, { threshold: <span class="val">0.15</span>, rootMargin: <span class="val">'0px 0px -10% 0px'</span> });
+
+document.querySelectorAll(<span class="val">'.section'</span>)
+  .forEach(s => observer.observe(s));</div>
+</section>
+
+<!-- ═══ PAGE STRUCTURE ═══ -->
+<section class="section" id="structure">
+  <div class="label">06 // Page Structure</div>
+  <div class="divider"></div>
+  <h2>Anatomy of a Page</h2>
+  <p class="body">Every w-b.dev hotsite follows this skeleton. Sections are full-viewport height on desktop, fluid on mobile. Each section has a numbered label, a divider, and a heading before its content.</p>
+
+  <div class="flow-chain" style="margin-top:40px">
+    <div class="flow-step"><div class="step-icon">H</div><div class="step-label">Hero &mdash; title, subtitle, visual anchor</div></div>
+    <div class="flow-step"><div class="step-icon">1</div><div class="step-label">Section &mdash; label "01 // name" + divider + h2 + body + component</div></div>
+    <div class="flow-step"><div class="step-icon">2</div><div class="step-label">Section &mdash; repeat pattern, vary component types</div></div>
+    <div class="flow-step"><div class="step-icon">N</div><div class="step-label">More sections as needed...</div></div>
+    <div class="flow-step highlight"><div class="step-icon">E</div><div class="step-label" style="color:var(--accent)">Outro &mdash; summary statement + author attribution</div></div>
+  </div>
+
+  <div class="code-block"><span class="comment">&lt;!-- Section pattern --&gt;</span>
+&lt;section class=<span class="val">"section"</span>&gt;
+  &lt;div class=<span class="val">"section-narrow"</span>&gt;
+    &lt;div class=<span class="val">"label"</span>&gt;01 // Section Name&lt;/div&gt;
+    &lt;div class=<span class="val">"divider"</span>&gt;&lt;/div&gt;
+    &lt;h2&gt;Heading&lt;/h2&gt;
+    &lt;p class=<span class="val">"body"</span>&gt;...&lt;/p&gt;
+    <span class="comment">&lt;!-- component here --&gt;</span>
+  &lt;/div&gt;
+&lt;/section&gt;</div>
+
+  <h3 style="margin-top:40px">Author Attribution</h3>
+  <p class="body">Every page ends with an author link. Monospace, subtle, links to LinkedIn.</p>
+  <div style="margin-top:20px;text-align:center">
+    <a href="https://linkedin.com/in/brasileiro" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:12px;letter-spacing:0.12em;color:var(--dim);text-decoration:none;border-bottom:1px solid var(--dimmer);padding-bottom:2px">Daniel Brasileiro</a>
+  </div>
+</section>
+
+<!-- ═══ STARTER ═══ -->
+<section class="section" id="starter">
+  <div class="label">07 // Starter Template</div>
+  <div class="divider"></div>
+  <h2>Copy &amp; Build</h2>
+  <p class="body">The minimal boilerplate for a new w-b.dev page. Includes all tokens, the scroll observer, section structure, and responsive breakpoints.</p>
+
+  <div class="code-block" style="font-size:11px;line-height:1.5;max-height:500px;overflow-y:auto">&lt;!DOCTYPE html&gt;
+&lt;html lang=<span class="val">"en"</span>&gt;
+&lt;head&gt;
+&lt;meta charset=<span class="val">"UTF-8"</span>&gt;
+&lt;meta name=<span class="val">"viewport"</span> content=<span class="val">"width=device-width, initial-scale=1.0"</span>&gt;
+&lt;title&gt;Page Title&lt;/title&gt;
+&lt;link rel=<span class="val">"preconnect"</span> href=<span class="val">"https://fonts.googleapis.com"</span>&gt;
+&lt;link rel=<span class="val">"preconnect"</span> href=<span class="val">"https://fonts.gstatic.com"</span> crossorigin&gt;
+&lt;link href=<span class="val">"https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&amp;display=swap"</span> rel=<span class="val">"stylesheet"</span>&gt;
+&lt;style&gt;
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0e0e0e;--bg2:#141414;--fg:#f3f1ec;
+  --dim:rgba(243,241,236,0.35);--dimmer:rgba(243,241,236,0.15);
+  --hair:rgba(243,241,236,0.08);
+  --accent:#d4a853;--accent-dim:rgba(212,168,83,0.3);
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --helv:Helvetica,"Helvetica Neue",Arial,sans-serif;
+}
+html{scroll-behavior:smooth;background:var(--bg);color:var(--fg);font-family:var(--helv)}
+body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.section{min-height:100vh;padding:120px 60px;opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+.section.visible{opacity:1;transform:translateY(0)}
+.section-narrow{max-width:900px;margin:0 auto}
+h1{font-weight:700;font-size:clamp(42px,6vw,72px);letter-spacing:-0.04em;line-height:1.0}
+h2{font-weight:700;font-size:clamp(24px,3.5vw,40px);letter-spacing:-0.03em;line-height:1.1;margin-bottom:32px}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim)}
+.divider{width:40px;height:1px;background:var(--dimmer);margin:0 0 32px}
+.body{font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:var(--dim);max-width:680px}
+.body strong{color:var(--fg);font-weight:600}
+.mono{font-family:var(--mono);font-size:13px;color:var(--dim)}
+@media(max-width:768px){.section{padding:80px 24px}}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;section class=<span class="val">"section"</span> style=<span class="val">"display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;opacity:1;transform:none"</span>&gt;
+  &lt;div class=<span class="val">"label"</span>&gt;Topic // Date&lt;/div&gt;
+  &lt;h1 style=<span class="val">"margin:16px 0"</span>&gt;Page Title&lt;/h1&gt;
+  &lt;p class=<span class="val">"mono"</span>&gt;subtitle here&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section class=<span class="val">"section"</span>&gt;
+  &lt;div class=<span class="val">"section-narrow"</span>&gt;
+    &lt;div class=<span class="val">"label"</span>&gt;01 // Section Name&lt;/div&gt;
+    &lt;div class=<span class="val">"divider"</span>&gt;&lt;/div&gt;
+    &lt;h2&gt;Heading Here&lt;/h2&gt;
+    &lt;p class=<span class="val">"body"</span>&gt;Your content.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class=<span class="val">"section"</span> style=<span class="val">"display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:60vh"</span>&gt;
+  &lt;h2&gt;Closing Statement&lt;/h2&gt;
+  &lt;a href=<span class="val">"https://linkedin.com/in/brasileiro"</span> target=<span class="val">"_blank"</span> style=<span class="val">"margin-top:40px;font-family:var(--mono);font-size:12px;letter-spacing:0.12em;color:var(--dim);text-decoration:none;border-bottom:1px solid var(--dimmer)"</span>&gt;Daniel Brasileiro&lt;/a&gt;
+&lt;/section&gt;
+
+&lt;script&gt;
+const o = new IntersectionObserver(e =&gt; e.forEach(x =&gt; {
+  if (x.isIntersecting) x.target.classList.add('visible');
+}), { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+document.querySelectorAll('.section').forEach(s =&gt; o.observe(s));
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+</section>
+
+<!-- ═══ SITES ═══ -->
+<section class="section" id="sites">
+  <div class="label">08 // Live Sites</div>
+  <div class="divider"></div>
+  <h2>Using This System</h2>
+  <table class="token-table">
+    <tr><th>URL</th><th>Type</th><th>Status</th></tr>
+    <tr><td><a href="https://pipeline-deep-dive.w-b.dev" style="color:var(--accent);text-decoration:none">pipeline-deep-dive.w-b.dev</a></td><td>Interactive longform</td><td>Reference implementation</td></tr>
+    <tr><td><a href="https://xdr-animated.w-b.dev" style="color:var(--accent);text-decoration:none">xdr-animated.w-b.dev</a></td><td>45s React animation</td><td>Related (monochrome, Helvetica)</td></tr>
+    <tr><td><a href="https://pipeline.w-b.dev" style="color:var(--accent);text-decoration:none">pipeline.w-b.dev</a></td><td>Static overview</td><td>Predecessor</td></tr>
+    <tr><td><a href="https://design.w-b.dev" style="color:var(--accent);text-decoration:none">design.w-b.dev</a></td><td>Design system</td><td>This page</td></tr>
+  </table>
+  <p class="body" style="margin-top:30px">To publish a new site: <code style="font-family:var(--mono);color:var(--accent)">/publish-static-site</code> in Claude Code.</p>
+</section>
+
+<!-- Footer -->
+<div style="text-align:center;padding:60px 0 40px">
+  <a href="https://linkedin.com/in/brasileiro" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:12px;letter-spacing:0.12em;color:var(--dim);text-decoration:none;border-bottom:1px solid var(--dimmer);padding-bottom:2px;transition:color 0.2s,border-color 0.2s" onmouseover="this.style.color='var(--fg)';this.style.borderColor='var(--fg)'" onmouseout="this.style.color='var(--dim)';this.style.borderColor='var(--dimmer)'">Daniel Brasileiro</a>
+</div>
+
+</div>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Title</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ═══ DESIGN TOKENS ═══════════════════════════════════════════════════════════
+   Source: https://design.w-b.dev
+   Repo:   https://github.com/w3b3/design-system-w-b
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root{
+  /* Backgrounds */
+  --bg:#0e0e0e;
+  --bg2:#141414;
+
+  /* Foreground — warm paper, never pure white */
+  --fg:#f3f1ec;
+
+  /* Opacity ladder — hierarchy through opacity, not hue */
+  --dim:rgba(243,241,236,0.35);       /* body text, labels */
+  --dimmer:rgba(243,241,236,0.15);    /* meta, timestamps, borders */
+  --hair:rgba(243,241,236,0.08);      /* subtle dividers, card edges */
+
+  /* Accent — the only non-grayscale color */
+  --accent:#d4a853;
+  --accent-dim:rgba(212,168,83,0.3);
+
+  /* Typography — two faces, no exceptions */
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  --helv:Helvetica,"Helvetica Neue",Arial,sans-serif;
+}
+
+/* ═══ BASE ═════════════════════════════════════════════════════════════════ */
+html{scroll-behavior:smooth;background:var(--bg);color:var(--fg);font-family:var(--helv)}
+body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ═══ SECTIONS ═════════════════════════════════════════════════════════════ */
+.section{
+  min-height:100vh;
+  padding:120px 60px;
+  opacity:0;transform:translateY(30px);
+  transition:opacity 0.7s ease,transform 0.7s ease;
+}
+.section.visible{opacity:1;transform:translateY(0)}
+.section-narrow{max-width:900px;margin:0 auto}
+.section-wide{max-width:1400px;margin:0 auto}
+
+/* ═══ TYPOGRAPHY ═══════════════════════════════════════════════════════════ */
+h1{font-weight:700;font-size:clamp(42px,6vw,72px);letter-spacing:-0.04em;line-height:1.0}
+h2{font-weight:700;font-size:clamp(24px,3.5vw,40px);letter-spacing:-0.03em;line-height:1.1;margin-bottom:32px}
+h3{font-weight:700;font-size:clamp(18px,2.5vw,28px);letter-spacing:-0.02em;line-height:1.2;margin-bottom:16px}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.body{font-family:var(--helv);font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:var(--dim);max-width:680px}
+.body strong{color:var(--fg);font-weight:600}
+.mono{font-family:var(--mono);font-size:13px;letter-spacing:0.02em;color:var(--dim)}
+.accent{color:var(--accent)}
+
+/* ═══ UTILITIES ════════════════════════════════════════════════════════════ */
+.divider{width:40px;height:1px;background:var(--dimmer);margin:0 0 32px}
+
+/* ═══ FLOW CHAIN ═══════════════════════════════════════════════════════════ */
+.flow-chain{display:flex;flex-direction:column;gap:0;margin:50px 0}
+.flow-step{display:flex;align-items:center;gap:16px;padding:14px 20px;border-left:2px solid var(--hair);
+  opacity:0;transform:translateX(-20px);transition:all 0.5s ease}
+.visible .flow-step{opacity:1;transform:translateX(0)}
+.flow-step:nth-child(1){transition-delay:0.1s}
+.flow-step:nth-child(2){transition-delay:0.2s}
+.flow-step:nth-child(3){transition-delay:0.3s}
+.flow-step:nth-child(4){transition-delay:0.4s}
+.flow-step:nth-child(5){transition-delay:0.5s}
+.flow-step:nth-child(6){transition-delay:0.6s}
+.flow-step:nth-child(7){transition-delay:0.7s}
+.flow-step .step-icon{width:32px;height:32px;border-radius:50%;background:var(--bg2);border:1px solid var(--dimmer);
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--dim);flex-shrink:0}
+.flow-step .step-label{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.flow-step .step-time{font-family:var(--mono);font-size:11px;color:var(--dimmer);margin-left:auto;flex-shrink:0}
+.flow-step.highlight{border-left-color:var(--accent)}
+.flow-step.highlight .step-icon{border-color:var(--accent);color:var(--accent)}
+.flow-step.highlight .step-label{color:var(--accent)}
+
+/* ═══ CARDS ════════════════════════════════════════════════════════════════ */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;margin:50px 0}
+.card{padding:24px;border:1px solid var(--hair);background:var(--bg2);
+  opacity:0;transform:translateY(20px);transition:all 0.6s ease}
+.visible .card{opacity:1;transform:translateY(0)}
+.visible .card:nth-child(1){transition-delay:0.1s}
+.visible .card:nth-child(2){transition-delay:0.2s}
+.visible .card:nth-child(3){transition-delay:0.3s}
+.visible .card:nth-child(4){transition-delay:0.4s}
+.visible .card:nth-child(5){transition-delay:0.5s}
+.visible .card:nth-child(6){transition-delay:0.6s}
+.card h4{font-family:var(--helv);font-weight:700;font-size:15px;letter-spacing:-0.01em;margin-bottom:10px}
+.card p{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.5}
+.card.accent-card{border-color:var(--accent-dim)}
+.card.accent-card h4{color:var(--accent)}
+
+/* ═══ TOPOLOGY BOX ═════════════════════════════════════════════════════════ */
+.topo-box{border:1px solid var(--hair);padding:24px;position:relative;margin:20px 0}
+.topo-box .topo-title{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--dimmer);position:absolute;top:-8px;left:16px;background:var(--bg);padding:0 8px}
+.topo-items{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.topo-item{font-family:var(--mono);font-size:11px;padding:5px 12px;border:1px solid var(--dimmer);color:var(--dim)}
+.topo-item.hot{border-color:var(--accent-dim);color:var(--accent)}
+
+/* ═══ STACKED LAYERS ═══════════════════════════════════════════════════════ */
+.layers{display:flex;flex-direction:column;gap:0;max-width:700px;margin:50px 0}
+.layer{padding:20px 24px;border:1px solid var(--hair);border-bottom:none;
+  opacity:0;transform:translateY(20px);transition:all 0.5s ease}
+.layer:last-child{border-bottom:1px solid var(--hair)}
+.visible .layer{opacity:1;transform:translateY(0)}
+.visible .layer:nth-child(1){transition-delay:0.15s}
+.visible .layer:nth-child(2){transition-delay:0.35s}
+.visible .layer:nth-child(3){transition-delay:0.55s}
+.layer-name{font-family:var(--helv);font-weight:700;font-size:14px;margin-bottom:4px}
+.layer-desc{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.layer.hot{border-color:var(--accent-dim)}
+.layer.hot .layer-name{color:var(--accent)}
+
+/* ═══ MATURITY / PROGRESS ══════════════════════════════════════════════════ */
+.maturity{margin:50px 0}
+.mat-level{display:flex;align-items:stretch;border-bottom:1px solid var(--hair);
+  opacity:0;transform:translateX(-20px);transition:all 0.5s ease}
+.visible .mat-level{opacity:1;transform:translateX(0)}
+.visible .mat-level:nth-child(1){transition-delay:0.1s}
+.visible .mat-level:nth-child(2){transition-delay:0.25s}
+.visible .mat-level:nth-child(3){transition-delay:0.4s}
+.visible .mat-level:nth-child(4){transition-delay:0.55s}
+.visible .mat-level:nth-child(5){transition-delay:0.7s}
+.mat-num{width:50px;padding:16px 0;text-align:center;font-family:var(--helv);font-weight:700;font-size:24px;color:var(--dimmer);flex-shrink:0}
+.mat-content{padding:16px;flex:1}
+.mat-content h4{font-family:var(--helv);font-weight:700;font-size:14px;margin-bottom:4px}
+.mat-content p{font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.4}
+.mat-level.current .mat-num{color:var(--accent)}
+.mat-level.current{border-left:3px solid var(--accent)}
+
+/* ═══ PIPELINE NODES ═══════════════════════════════════════════════════════ */
+.node-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:30px 0}
+.node{width:64px;height:64px;border-radius:50%;border:2px solid var(--fg);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:9px;letter-spacing:0.06em;text-transform:uppercase}
+.node.filled{background:var(--fg);color:var(--bg)}
+.node.accent{border-color:var(--accent);color:var(--accent)}
+.node-arrow{font-family:var(--mono);color:var(--dimmer);font-size:16px}
+
+/* ═══ SPLIT PANELS ═════════════════════════════════════════════════════════ */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin:60px 0}
+.split-panel{padding:30px;border:1px solid var(--hair);position:relative}
+.split-panel.old{opacity:0.4}
+.split-panel.new{border-color:var(--accent-dim)}
+.split-panel .panel-label{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);margin-bottom:20px}
+.split-panel.new .panel-label{color:var(--accent)}
+
+/* ═══ TIMELINE / ROADMAP ═══════════════════════════════════════════════════ */
+.roadmap{margin:50px 0}
+.phase{padding:24px 0 24px 36px;border-left:2px solid var(--hair);position:relative;
+  opacity:0;transform:translateX(-20px);transition:all 0.5s ease}
+.visible .phase{opacity:1;transform:translateX(0)}
+.visible .phase:nth-child(1){transition-delay:0.1s}
+.visible .phase:nth-child(2){transition-delay:0.25s}
+.visible .phase:nth-child(3){transition-delay:0.4s}
+.visible .phase:nth-child(4){transition-delay:0.55s}
+.visible .phase:nth-child(5){transition-delay:0.7s}
+.phase::before{content:'';position:absolute;left:-6px;top:28px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--dimmer)}
+.phase h4{font-family:var(--helv);font-weight:700;font-size:16px;margin-bottom:6px}
+.phase ul{list-style:none;padding:0}
+.phase li{font-family:var(--mono);font-size:12px;color:var(--dim);padding:3px 0;line-height:1.4}
+.phase li::before{content:'';display:inline-block;width:6px;height:1px;background:var(--dim);margin-right:10px;vertical-align:middle}
+
+/* ═══ ANIMATIONS ═══════════════════════════════════════════════════════════ */
+@keyframes breathe{0%,100%{opacity:0.3}50%{opacity:1}}
+@keyframes nodeIn{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+.breathe{animation:breathe 2s ease infinite}
+
+/* ═══ RESPONSIVE ═══════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  .section{padding:80px 24px}
+  .split{grid-template-columns:1fr;gap:30px}
+  .card-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══════════════════════════════════════════════════════════════ -->
+<section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;opacity:1;transform:none">
+  <div class="label">Topic // Date</div>
+  <h1 style="margin:16px 0">Page Title</h1>
+  <p class="mono" style="margin-top:8px">subtitle goes here</p>
+</section>
+
+<!-- ═══ SECTION TEMPLATE ══════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-narrow">
+    <div class="label">01 // Section Name</div>
+    <div class="divider"></div>
+    <h2>Section Heading</h2>
+    <p class="body">Body text with <strong>bold emphasis</strong> that promotes to full foreground color. Keep these paragraphs under 680px wide for comfortable reading.</p>
+
+    <!-- Replace with your component of choice -->
+    <div class="flow-chain" style="margin-top:40px">
+      <div class="flow-step"><div class="step-icon">1</div><div class="step-label">First step in the sequence</div></div>
+      <div class="flow-step"><div class="step-icon">2</div><div class="step-label">Second step</div></div>
+      <div class="flow-step highlight"><div class="step-icon">!</div><div class="step-label">Key moment — highlighted</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ OUTRO ═════════════════════════════════════════════════════════════ -->
+<section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:60vh">
+  <h2>Closing Statement</h2>
+  <p class="mono" style="margin-top:30px;max-width:500px;text-align:center;line-height:1.6">A summary sentence that captures the core idea.</p>
+  <a href="https://linkedin.com/in/brasileiro" target="_blank" rel="noopener"
+     style="display:inline-block;margin-top:50px;font-family:var(--mono);font-size:12px;letter-spacing:0.12em;color:var(--dim);text-decoration:none;border-bottom:1px solid var(--dimmer);padding-bottom:2px;transition:color 0.2s,border-color 0.2s"
+     onmouseover="this.style.color='var(--fg)';this.style.borderColor='var(--fg)'"
+     onmouseout="this.style.color='var(--dim)';this.style.borderColor='var(--dimmer)'">Daniel Brasileiro</a>
+</section>
+
+<!-- ═══ SCROLL OBSERVER ═══════════════════════════════════════════════════ -->
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

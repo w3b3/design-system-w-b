@@ -1,0 +1,27 @@
+/*
+ * w-b.dev Design System — CSS Tokens
+ * https://design.w-b.dev
+ * https://github.com/w3b3/design-system-w-b
+ */
+
+:root {
+  /* Backgrounds */
+  --bg: #0e0e0e;
+  --bg2: #141414;
+
+  /* Foreground — warm paper, never pure white */
+  --fg: #f3f1ec;
+
+  /* Opacity ladder */
+  --dim: rgba(243, 241, 236, 0.35);
+  --dimmer: rgba(243, 241, 236, 0.15);
+  --hair: rgba(243, 241, 236, 0.08);
+
+  /* Accent — the only non-grayscale color */
+  --accent: #d4a853;
+  --accent-dim: rgba(212, 168, 83, 0.3);
+
+  /* Typography — two faces only */
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --helv: Helvetica, "Helvetica Neue", Arial, sans-serif;
+}
