@@ -1,5 +1,7 @@
 # w-b.dev Design System
 
+<img width="1097" height="495" alt="image" src="https://github.com/user-attachments/assets/ae9b5498-3d1e-42ac-a43d-e5bffdea0992" />
+
 A dark monochrome design system for publishing single-page technical hotsites. Two typefaces. One accent color. Scroll-driven animations. Zero frameworks.
 
 **Live reference:** [design.w-b.dev](https://design.w-b.dev)
