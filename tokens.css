@@ -13,9 +13,10 @@
   --fg: #f3f1ec;
 
   /* Opacity ladder */
-  --dim: rgba(243, 241, 236, 0.35);
-  --dimmer: rgba(243, 241, 236, 0.15);
-  --hair: rgba(243, 241, 236, 0.08);
+  /* Note: keep body text >= 4.5:1 contrast on --bg */
+  --dim: rgba(243, 241, 236, 0.5); /* body text, labels */
+  --dimmer: rgba(243, 241, 236, 0.32); /* meta, timestamps, borders */
+  --hair: rgba(243, 241, 236, 0.14); /* subtle dividers, card edges */
 
   /* Accent — the only non-grayscale color */
   --accent: #d4a853;
@@ -24,4 +25,12 @@
   /* Typography — two faces only */
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --helv: Helvetica, "Helvetica Neue", Arial, sans-serif;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --dim: rgba(243, 241, 236, 0.62);
+    --dimmer: rgba(243, 241, 236, 0.45);
+    --hair: rgba(243, 241, 236, 0.22);
+  }
 }

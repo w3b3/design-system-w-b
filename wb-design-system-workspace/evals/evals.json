@@ -1,0 +1,23 @@
+{
+  "skill_name": "wb-design-system",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Build me a single-file HTML hotsite called 'threat-intel.w-b.dev' that explains a cybersecurity threat intelligence pipeline. It should have 3 content sections: one explaining data ingestion, one covering normalization/enrichment, and one on detection rules. Use a flow chain component in the first section and cards in the second.",
+      "expected_output": "A complete, single-file index.html that uses the w-b.dev design system tokens exactly: dark background (#0e0e0e), warm paper foreground (#f3f1ec), JetBrains Mono + Helvetica fonts, amber accent (#d4a853), scroll-driven IntersectionObserver reveal, section labels in '01 // Name' format, no border-radius on cards, author attribution link at the end.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "I need a new section for my w-b.dev page that compares our old alert triage approach to the new one. Build a split-panel comparison component showing 'Before' on the left (old, dimmed) and 'After' on the right (accent-bordered). Include 4 bullet points on each side using the monospace style.",
+      "expected_output": "HTML+CSS for a content section that uses the split-panel component pattern: .split > .split-panel.old + .split-panel.new, old panel at opacity 0.4, new panel with accent-dim border, monospace labels, no border-radius, uses design tokens for all colors.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I have this page snippet and want you to review it and fix any design system violations:\n\n```html\n<div style=\"background:#fff;color:#333;font-family:Arial\">\n  <h1 style=\"font-size:48px;color:#1a1a1a\">Pipeline Overview</h1>\n  <p style=\"color:#666;font-size:16px\">Our data pipeline processes 10M events/day.</p>\n  <div style=\"background:#f0f0f0;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)\">\n    <span style=\"color:blue\">Active</span> — Processing\n  </div>\n</div>\n```",
+      "expected_output": "Fixed HTML that applies design system tokens: --bg (#0e0e0e) background, --fg (#f3f1ec) for headline, --dim for body, --accent for the active state, removes border-radius and box-shadow, uses Helvetica/JetBrains Mono, and explains each violation fixed.",
+      "files": []
+    }
+  ]
+}

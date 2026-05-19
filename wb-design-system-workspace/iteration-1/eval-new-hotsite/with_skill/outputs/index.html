@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threat Intelligence Pipeline — threat-intel.w-b.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0e0e0e;
+  --bg2:#141414;
+  --fg:#f3f1ec;
+  --dim:rgba(243,241,236,0.35);
+  --dimmer:rgba(243,241,236,0.15);
+  --hair:rgba(243,241,236,0.08);
+  --accent:#d4a853;
+  --accent-dim:rgba(212,168,83,0.3);
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  --helv:Helvetica,"Helvetica Neue",Arial,sans-serif;
+}
+
+html{scroll-behavior:smooth;background:var(--bg);color:var(--fg);font-family:var(--helv)}
+body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+.section{
+  min-height:100vh;
+  padding:120px 60px;
+  opacity:0;transform:translateY(30px);
+  transition:opacity 0.7s ease,transform 0.7s ease;
+}
+.section.visible{opacity:1;transform:translateY(0)}
+.section-narrow{max-width:900px;margin:0 auto}
+.section-wide{max-width:1400px;margin:0 auto}
+
+h1{font-weight:700;font-size:clamp(42px,6vw,72px);letter-spacing:-0.04em;line-height:1.0}
+h2{font-weight:700;font-size:clamp(24px,3.5vw,40px);letter-spacing:-0.03em;line-height:1.1;margin-bottom:32px}
+h3{font-weight:700;font-size:clamp(18px,2.5vw,28px);letter-spacing:-0.02em;line-height:1.2;margin-bottom:16px}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.divider{width:40px;height:1px;background:var(--dimmer);margin:0 0 32px}
+.body{font-family:var(--helv);font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:var(--dim);max-width:680px}
+.body strong{color:var(--fg);font-weight:600}
+.mono{font-family:var(--mono);font-size:13px;letter-spacing:0.02em;color:var(--dim)}
+
+/* ═══ FLOW CHAIN ══════════════════════════════════════════════════════════════ */
+.flow-chain{display:flex;flex-direction:column;gap:0;margin:50px 0}
+.flow-step{
+  display:flex;align-items:center;gap:16px;
+  padding:14px 20px;
+  border-left:2px solid var(--hair);
+  opacity:0;transform:translateX(-20px);
+  transition:opacity 0.5s ease,transform 0.5s ease;
+}
+.visible .flow-step{opacity:1;transform:translateX(0)}
+.visible .flow-step:nth-child(1){transition-delay:0.1s}
+.visible .flow-step:nth-child(2){transition-delay:0.2s}
+.visible .flow-step:nth-child(3){transition-delay:0.3s}
+.visible .flow-step:nth-child(4){transition-delay:0.4s}
+.visible .flow-step:nth-child(5){transition-delay:0.5s}
+.visible .flow-step:nth-child(6){transition-delay:0.6s}
+.visible .flow-step:nth-child(7){transition-delay:0.7s}
+.flow-step .step-icon{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--bg2);border:1px solid var(--dimmer);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:10px;color:var(--dim);flex-shrink:0;
+}
+.flow-step .step-label{font-family:var(--mono);font-size:12px;color:var(--dim);flex:1}
+.flow-step .step-meta{font-family:var(--mono);font-size:10px;color:var(--dimmer);flex-shrink:0;letter-spacing:0.12em}
+.flow-step.highlight{border-left-color:var(--accent)}
+.flow-step.highlight .step-icon{border-color:var(--accent);color:var(--accent)}
+.flow-step.highlight .step-label{color:var(--accent)}
+
+/* ═══ CARDS ═══════════════════════════════════════════════════════════════════ */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;margin:50px 0}
+.card{
+  padding:24px;border:1px solid var(--hair);background:var(--bg2);
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.6s ease,transform 0.6s ease;
+}
+.visible .card{opacity:1;transform:translateY(0)}
+.visible .card:nth-child(1){transition-delay:0.1s}
+.visible .card:nth-child(2){transition-delay:0.2s}
+.visible .card:nth-child(3){transition-delay:0.3s}
+.visible .card:nth-child(4){transition-delay:0.4s}
+.visible .card:nth-child(5){transition-delay:0.5s}
+.visible .card:nth-child(6){transition-delay:0.6s}
+.card h4{font-family:var(--helv);font-weight:700;font-size:15px;letter-spacing:-0.01em;margin-bottom:10px}
+.card p{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.5}
+.card .card-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--dimmer);margin-bottom:14px}
+.card.accent-card{border-color:var(--accent-dim)}
+.card.accent-card h4{color:var(--accent)}
+.card.accent-card .card-tag{color:var(--accent-dim)}
+
+/* ═══ DETECTION RULE BLOCK ════════════════════════════════════════════════════ */
+.rule-block{
+  border:1px solid var(--hair);background:var(--bg2);
+  margin:50px 0;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.6s ease,transform 0.6s ease;
+}
+.visible .rule-block{opacity:1;transform:translateY(0)}
+.visible .rule-block:nth-child(1){transition-delay:0.1s}
+.visible .rule-block:nth-child(2){transition-delay:0.25s}
+.visible .rule-block:nth-child(3){transition-delay:0.4s}
+.rule-block-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;border-bottom:1px solid var(--hair);
+}
+.rule-block-header .rule-title{font-family:var(--helv);font-weight:700;font-size:14px;letter-spacing:-0.01em}
+.rule-block-header .rule-severity{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;
+  padding:4px 10px;border:1px solid var(--dimmer);color:var(--dim);
+}
+.rule-block-header .rule-severity.high{border-color:var(--accent-dim);color:var(--accent)}
+.rule-block-body{padding:20px 24px}
+.rule-block-body .rule-desc{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.6;margin-bottom:16px}
+.rule-conditions{display:flex;flex-wrap:wrap;gap:8px}
+.rule-cond{
+  font-family:var(--mono);font-size:11px;
+  padding:4px 12px;border:1px solid var(--hair);color:var(--dimmer);
+}
+
+/* ═══ STATS ROW ═══════════════════════════════════════════════════════════════ */
+.stats-row{display:flex;gap:48px;margin:48px 0;flex-wrap:wrap}
+.stat{display:flex;flex-direction:column;gap:6px}
+.stat-num{font-family:var(--helv);font-weight:700;font-size:clamp(28px,4vw,44px);letter-spacing:-0.03em;color:var(--fg)}
+.stat-num.accent{color:var(--accent)}
+.stat-label{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dimmer)}
+
+/* ═══ ANIMATIONS ══════════════════════════════════════════════════════════════ */
+@keyframes breathe{0%,100%{opacity:0.3}50%{opacity:1}}
+.breathe{animation:breathe 2.5s ease infinite}
+
+/* ═══ RESPONSIVE ══════════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  .section{padding:80px 24px}
+  .card-grid{grid-template-columns:1fr}
+  .stats-row{gap:32px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═════════════════════════════════════════════════════════════════ -->
+<section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;opacity:1;transform:none">
+  <div class="label">Threat Intelligence // Pipeline</div>
+  <h1 style="margin:16px 0">From Raw Signal<br>to Actionable Intel</h1>
+  <p class="mono" style="margin-top:16px;max-width:560px;text-align:center;line-height:1.7">How a modern threat intelligence pipeline ingests, normalizes, and converts adversary data into detection rules that protect production systems.</p>
+  <div style="margin-top:48px;display:flex;gap:16px;align-items:center">
+    <span class="mono breathe" style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dimmer)">Live Collection Active</span>
+    <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:breathe 2.5s ease infinite"></span>
+  </div>
+</section>
+
+<!-- ═══ SECTION 01 — DATA INGESTION ══════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-narrow">
+    <div class="label">01 // Data Ingestion</div>
+    <div class="divider"></div>
+    <h2>Collecting Adversary Signal at Scale</h2>
+    <p class="body">Effective threat intelligence starts with <strong>broad, heterogeneous collection</strong>. The pipeline pulls from open-source feeds, commercial providers, dark-web monitors, honeypots, and sensor telemetry — all arriving in different formats, cadences, and reliability tiers. Every source enters through a <strong>rate-limited ingestion gateway</strong> that enforces schema validation before any record touches downstream systems.</p>
+
+    <div class="flow-chain">
+      <div class="flow-step">
+        <div class="step-icon">01</div>
+        <div class="step-label">OSINT feeds — MISP, AlienVault OTX, Abuse.ch, URLhaus, Feodo Tracker</div>
+        <div class="step-meta">Continuous</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon">02</div>
+        <div class="step-label">Commercial threat intel — Recorded Future, Mandiant, Crowdstrike Falcon X</div>
+        <div class="step-meta">Every 15 min</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon">03</div>
+        <div class="step-label">Dark-web monitoring — paste sites, Telegram channels, forum crawlers</div>
+        <div class="step-meta">Every 6 h</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon">04</div>
+        <div class="step-label">Honeypot telemetry — attacker TTPs captured in isolated sensor environments</div>
+        <div class="step-meta">Real-time</div>
+      </div>
+      <div class="flow-step highlight">
+        <div class="step-icon">GW</div>
+        <div class="step-label">Ingestion gateway — schema validation, deduplication, rate limiting, source scoring</div>
+        <div class="step-meta">All sources</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon">05</div>
+        <div class="step-label">Raw event queue — Kafka topic per source type, immutable append log</div>
+        <div class="step-meta">Retained 30 d</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon">06</div>
+        <div class="step-label">Cold archive — S3-compatible object store for historical replay and auditing</div>
+        <div class="step-meta">Retained 2 yr</div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-num accent">4.2M</div>
+        <div class="stat-label">Indicators per day</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">38</div>
+        <div class="stat-label">Active sources</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">99.7%</div>
+        <div class="stat-label">Gateway uptime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 02 — NORMALIZATION & ENRICHMENT ═══════════════════════════════ -->
+<section class="section">
+  <div class="section-wide">
+    <div class="section-narrow" style="max-width:900px">
+      <div class="label">02 // Normalization &amp; Enrichment</div>
+      <div class="divider"></div>
+      <h2>Making Raw Data Machine-Readable and Context-Rich</h2>
+      <p class="body">Raw indicators arrive in dozens of incompatible formats — STIX 2.1, CSV, JSON, YARA, plain text. A normalization layer <strong>maps everything to a unified schema</strong> before enrichment workers layer on geolocation, ASN ownership, passive DNS history, WHOIS records, sandbox detonation results, and MITRE ATT&amp;CK technique mappings. Only enriched records advance to the correlation engine.</p>
+    </div>
+
+    <div class="card-grid" style="margin-top:50px">
+      <div class="card">
+        <div class="card-tag">Format Parsing</div>
+        <h4>Schema Normalization</h4>
+        <p>STIX 2.1, OpenIOC, MISP JSON, CSV, and free-text are all parsed into a canonical indicator record with fixed fields: type, value, confidence, tlp, first_seen, last_seen, source_id.</p>
+      </div>
+      <div class="card">
+        <div class="card-tag">Geolocation</div>
+        <h4>IP Context Enrichment</h4>
+        <p>MaxMind GeoIP2 and IPinfo supplement every IP indicator with country, city, ASN, and organization. Hosting provider fingerprints flag bulletproof hosters known to tolerate abuse.</p>
+      </div>
+      <div class="card">
+        <div class="card-tag">Passive DNS</div>
+        <h4>Domain History Resolution</h4>
+        <p>pDNS lookups reconstruct historical A, AAAA, MX, and NS records. Infrastructure pivots reveal shared hosting patterns that connect seemingly unrelated attacker campaigns.</p>
+      </div>
+      <div class="card accent-card">
+        <div class="card-tag">ATT&amp;CK Mapping</div>
+        <h4>TTP Classification</h4>
+        <p>Behavioral indicators are mapped to MITRE ATT&amp;CK tactics and techniques. Every enriched record carries a tactic vector — enabling tactic-aware prioritization downstream.</p>
+      </div>
+      <div class="card accent-card">
+        <div class="card-tag">Sandbox Detonation</div>
+        <h4>Dynamic Malware Analysis</h4>
+        <p>Suspicious files and URLs are submitted to an isolated detonation cluster. Behavioral reports — process trees, network connections, registry mutations — are attached to the indicator record.</p>
+      </div>
+      <div class="card">
+        <div class="card-tag">Confidence Scoring</div>
+        <h4>Reliability Weighting</h4>
+        <p>A weighted Bayesian model scores each indicator 0–100 based on source reputation, corroboration across feeds, age, and detonation confirmation. Low-confidence records are quarantined for analyst review.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 03 — DETECTION RULES ═════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-narrow">
+    <div class="label">03 // Detection Rules</div>
+    <div class="divider"></div>
+    <h2>Converting Intel into Enforced Policy</h2>
+    <p class="body">Enriched indicators feed a rule-generation engine that produces <strong>Sigma rules, YARA signatures, and SIEM correlation logic</strong> automatically for high-confidence records. Human analysts review medium-confidence candidates before promotion. Every rule carries provenance metadata linking it back to its source indicators — so when an indicator ages out, affected rules are flagged for reassessment automatically.</p>
+
+    <div style="margin-top:50px">
+
+      <div class="rule-block">
+        <div class="rule-block-header">
+          <div class="rule-title">Outbound C2 Beacon — Known Cobalt Strike Team Servers</div>
+          <div class="rule-severity high">HIGH</div>
+        </div>
+        <div class="rule-block-body">
+          <p class="rule-desc">Detects HTTP/S connections to IPs and FQDNs confirmed as active Cobalt Strike infrastructure based on Shodan fingerprinting and honeypot callback validation. Generated automatically from 847 corroborated indicators across 12 feeds.</p>
+          <div class="rule-conditions">
+            <span class="rule-cond">dst_ip IN threat_intel.cs_teamservers</span>
+            <span class="rule-cond">http.user_agent MATCHES /^Mozilla\/5\.0.*$/</span>
+            <span class="rule-cond">confidence &gt;= 80</span>
+            <span class="rule-cond">src_internal = true</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-block-header">
+          <div class="rule-title">Phishing Domain — Lookalike Brand Impersonation</div>
+          <div class="rule-severity high">HIGH</div>
+        </div>
+        <div class="rule-block-body">
+          <p class="rule-desc">Matches DNS queries and HTTP Host headers against a dynamically updated list of domains registered within the last 7 days that score above 0.85 on a lookalike similarity model trained on the organization's brand assets.</p>
+          <div class="rule-conditions">
+            <span class="rule-cond">dns.query IN threat_intel.lookalike_domains</span>
+            <span class="rule-cond">domain_age_days &lt;= 7</span>
+            <span class="rule-cond">similarity_score &gt;= 0.85</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-block-header">
+          <div class="rule-title">Ransomware Precursor — Living-off-the-Land Binary Sequence</div>
+          <div class="rule-severity">MEDIUM</div>
+        </div>
+        <div class="rule-block-body">
+          <p class="rule-desc">Identifies process execution sequences observed in pre-encryption reconnaissance phases across analyzed ransomware samples. Requires analyst review before promotion to block; currently in alert-only mode with 72-hour review SLA.</p>
+          <div class="rule-conditions">
+            <span class="rule-cond">process.name IN [certutil, wmic, nltest]</span>
+            <span class="rule-cond">sequence.window = 300s</span>
+            <span class="rule-cond">mitre.technique = T1069</span>
+            <span class="rule-cond">review_status = pending</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="stats-row" style="margin-top:16px">
+      <div class="stat">
+        <div class="stat-num accent">1,204</div>
+        <div class="stat-label">Active rules</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">94%</div>
+        <div class="stat-label">Auto-generated</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">72 h</div>
+        <div class="stat-label">Review SLA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ OUTRO ══════════════════════════════════════════════════════════════════ -->
+<section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:60vh">
+  <h2>Signal becomes defense<br>automatically.</h2>
+  <p class="mono" style="margin-top:30px;max-width:520px;text-align:center;line-height:1.7">From raw adversary data to enforced detection policy — the pipeline runs continuously, so analysts spend time on judgment, not data wrangling.</p>
+  <a href="https://linkedin.com/in/brasileiro" target="_blank" rel="noopener"
+     style="display:inline-block;margin-top:50px;font-family:var(--mono);font-size:12px;letter-spacing:0.12em;color:var(--dim);text-decoration:none;border-bottom:1px solid var(--dimmer);padding-bottom:2px;transition:color 0.2s,border-color 0.2s"
+     onmouseover="this.style.color='var(--fg)';this.style.borderColor='var(--fg)'"
+     onmouseout="this.style.color='var(--dim)';this.style.borderColor='var(--dimmer)'">Daniel Brasileiro</a>
+</section>
+
+<!-- ═══ SCROLL OBSERVER ════════════════════════════════════════════════════════ -->
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

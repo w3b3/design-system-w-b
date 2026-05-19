@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alert Triage — Before &amp; After</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0e0e0e;
+  --bg2:#141414;
+  --fg:#f3f1ec;
+  --dim:rgba(243,241,236,0.35);
+  --dimmer:rgba(243,241,236,0.15);
+  --hair:rgba(243,241,236,0.08);
+  --accent:#d4a853;
+  --accent-dim:rgba(212,168,83,0.3);
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  --helv:Helvetica,"Helvetica Neue",Arial,sans-serif;
+}
+
+html{scroll-behavior:smooth;background:var(--bg);color:var(--fg);font-family:var(--helv)}
+body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+.section{
+  min-height:100vh;
+  padding:120px 60px;
+  opacity:0;transform:translateY(30px);
+  transition:opacity 0.7s ease,transform 0.7s ease;
+}
+.section.visible{opacity:1;transform:translateY(0)}
+.section-narrow{max-width:900px;margin:0 auto}
+.section-wide{max-width:1400px;margin:0 auto}
+
+h1{font-weight:700;font-size:clamp(42px,6vw,72px);letter-spacing:-0.04em;line-height:1.0}
+h2{font-weight:700;font-size:clamp(24px,3.5vw,40px);letter-spacing:-0.03em;line-height:1.1;margin-bottom:32px}
+h3{font-weight:700;font-size:clamp(18px,2.5vw,28px);letter-spacing:-0.02em;line-height:1.2;margin-bottom:16px}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.body{font-family:var(--helv);font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:var(--dim);max-width:680px}
+.body strong{color:var(--fg);font-weight:600}
+.mono{font-family:var(--mono);font-size:13px;letter-spacing:0.02em;color:var(--dim)}
+
+.divider{width:40px;height:1px;background:var(--dimmer);margin:0 0 32px}
+
+/* Split Panels */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin:60px 0}
+.split-panel{padding:30px;border:1px solid var(--hair);position:relative;
+  opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease}
+.visible .split-panel{opacity:1;transform:translateY(0)}
+.visible .split-panel:nth-child(1){transition-delay:0.15s}
+.visible .split-panel:nth-child(2){transition-delay:0.3s}
+
+.split-panel.old{opacity:0 !important}
+.visible .split-panel.old{opacity:0.4 !important;transform:translateY(0)}
+.split-panel.new{border-color:var(--accent-dim)}
+
+.split-panel .panel-label{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--dim);
+  margin-bottom:20px;
+}
+.split-panel.new .panel-label{color:var(--accent)}
+
+/* Bullet list in mono style */
+.panel-list{list-style:none;padding:0;margin-top:16px;display:flex;flex-direction:column;gap:14px}
+.panel-list li{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.02em;
+  color:var(--dim);
+  line-height:1.5;
+  padding-left:18px;
+  position:relative;
+}
+.panel-list li::before{
+  content:'';
+  display:inline-block;
+  width:6px;
+  height:1px;
+  background:var(--dim);
+  position:absolute;
+  left:0;
+  top:9px;
+}
+.split-panel.new .panel-list li{color:var(--fg)}
+.split-panel.new .panel-list li::before{background:var(--accent)}
+
+/* Responsive */
+@media(max-width:768px){
+  .section{padding:80px 24px}
+  .split{grid-template-columns:1fr;gap:30px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;opacity:1;transform:none">
+  <div class="label">Ops // Alert Triage</div>
+  <h1 style="margin:16px 0">How We Handle Alerts</h1>
+  <p class="mono" style="margin-top:8px">before &amp; after the new triage approach</p>
+</section>
+
+<!-- COMPARISON SECTION -->
+<section class="section">
+  <div class="section-wide">
+    <div class="label">01 // Triage Approach</div>
+    <div class="divider"></div>
+    <h2>Before &amp; After</h2>
+    <p class="body">We replaced a reactive, manual triage process with a structured, priority-driven workflow. The shift reduced mean time to acknowledge and eliminated alert fatigue from noise-heavy queues.</p>
+
+    <div class="split">
+
+      <!-- BEFORE panel -->
+      <div class="split-panel old">
+        <div class="panel-label">Before</div>
+        <ul class="panel-list">
+          <li>All alerts land in a shared Slack channel with no priority signal — on-call rotates triage manually</li>
+          <li>Runbooks stored in a mix of Confluence pages, Google Docs, and tribal memory — no single source of truth</li>
+          <li>Severity assigned verbally during incident bridge; no automated classification at ingest time</li>
+          <li>Post-incident reviews scheduled ad hoc, often skipped under delivery pressure — learnings siloed per team</li>
+        </ul>
+      </div>
+
+      <!-- AFTER panel -->
+      <div class="split-panel new">
+        <div class="panel-label">After</div>
+        <ul class="panel-list">
+          <li>Alerts enriched at ingest with P1–P4 severity tags; routed to dedicated queues with SLA timers and auto-escalation</li>
+          <li>Every alert links directly to a versioned runbook in the ops repo — reviewed quarterly, owned by the service team</li>
+          <li>ML-assisted deduplication and noise suppression cut weekly alert volume by 60% before on-call sees anything</li>
+          <li>Blameless post-mortems filed within 48h for all P1/P2 events; action items tracked in Jira with weekly review cadence</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- OUTRO -->
+<section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:60vh">
+  <h2>Signal over noise.</h2>
+  <p class="mono" style="margin-top:30px;max-width:500px;text-align:center;line-height:1.6">Structure at the edges keeps the center calm.</p>
+  <a href="https://linkedin.com/in/brasileiro" target="_blank" rel="noopener"
+     style="display:inline-block;margin-top:50px;font-family:var(--mono);font-size:12px;letter-spacing:0.12em;color:var(--dim);text-decoration:none;border-bottom:1px solid var(--dimmer);padding-bottom:2px;transition:color 0.2s,border-color 0.2s"
+     onmouseover="this.style.color='var(--fg)';this.style.borderColor='var(--fg)'"
+     onmouseout="this.style.color='var(--dim)';this.style.borderColor='var(--dimmer)'">Daniel Brasileiro</a>
+</section>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

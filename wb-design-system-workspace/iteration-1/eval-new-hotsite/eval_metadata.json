@@ -1,0 +1,17 @@
+{
+  "eval_id": 0,
+  "eval_name": "new-hotsite",
+  "prompt": "Build me a single-file HTML hotsite called 'threat-intel.w-b.dev' that explains a cybersecurity threat intelligence pipeline. It should have 3 content sections: one explaining data ingestion, one covering normalization/enrichment, and one on detection rules. Use a flow chain component in the first section and cards in the second.",
+  "assertions": [
+    {"id": "has-dark-bg", "description": "Page background uses #0e0e0e or var(--bg), not white"},
+    {"id": "uses-jetbrains-mono", "description": "Google Fonts import for JetBrains Mono present"},
+    {"id": "has-section-label-format", "description": "At least one label matching '01 // ' or '02 // ' numbering pattern"},
+    {"id": "has-scroll-observer", "description": "IntersectionObserver code is present"},
+    {"id": "has-author-attribution", "description": "linkedin.com/in/brasileiro link present"},
+    {"id": "no-border-radius-cards", "description": "Cards have no border-radius"},
+    {"id": "no-extra-colors", "description": "No colors outside the design system palette (no blue, green, red, etc.)"},
+    {"id": "flow-chain-in-section1", "description": ".flow-chain or .flow-step classes present"},
+    {"id": "cards-in-section2", "description": ".card class present for normalization section"},
+    {"id": "uses-clamp-headings", "description": "clamp() used for heading font sizes"}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "content-section-split-panel",
+  "prompt": "I need a new section for my w-b.dev page that compares our old alert triage approach to the new one. Build a split-panel comparison component showing 'Before' on the left (old, dimmed) and 'After' on the right (accent-bordered). Include 4 bullet points on each side using the monospace style.",
+  "assertions": [
+    {"id": "split-panel-structure", "description": ".split-panel.old and .split-panel.new classes present"},
+    {"id": "old-panel-dimmed", "description": "opacity: 0.4 applied to .split-panel.old"},
+    {"id": "new-panel-accent-border", "description": "accent-dim or --accent used for new panel border"},
+    {"id": "mono-for-bullets", "description": "Bullet points use monospace (JetBrains Mono / var(--mono))"},
+    {"id": "no-hardcoded-hex-outside-root", "description": "No hardcoded hex colors outside of :root token definitions"},
+    {"id": "has-dark-bg", "description": "Dark background (#0e0e0e) used, not light theme"},
+    {"id": "panel-label-uppercase-mono", "description": "Panel labels use uppercase monospace style"}
+  ]
+}

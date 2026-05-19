@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alert Triage — Before &amp; After</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ═══ DESIGN TOKENS ═══════════════════════════════════════════════════════════
+   Source: https://design.w-b.dev
+   Repo:   https://github.com/w3b3/design-system-w-b
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#0e0e0e;
+  --bg2:#141414;
+  --fg:#f3f1ec;
+  --dim:rgba(243,241,236,0.35);
+  --dimmer:rgba(243,241,236,0.15);
+  --hair:rgba(243,241,236,0.08);
+  --accent:#d4a853;
+  --accent-dim:rgba(212,168,83,0.3);
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  --helv:Helvetica,"Helvetica Neue",Arial,sans-serif;
+}
+
+/* ═══ BASE ═════════════════════════════════════════════════════════════════ */
+html{scroll-behavior:smooth;background:var(--bg);color:var(--fg);font-family:var(--helv)}
+body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ═══ SECTIONS ═════════════════════════════════════════════════════════════ */
+.section{
+  min-height:100vh;
+  padding:120px 60px;
+  opacity:0;transform:translateY(30px);
+  transition:opacity 0.7s ease,transform 0.7s ease;
+}
+.section.visible{opacity:1;transform:translateY(0)}
+.section-wide{max-width:1400px;margin:0 auto}
+.section-narrow{max-width:900px;margin:0 auto}
+
+/* ═══ TYPOGRAPHY ═══════════════════════════════════════════════════════════ */
+h2{font-weight:700;font-size:clamp(24px,3.5vw,40px);letter-spacing:-0.03em;line-height:1.1;margin-bottom:32px}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.body{font-family:var(--helv);font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:var(--dim);max-width:680px}
+.body strong{color:var(--fg);font-weight:600}
+.mono{font-family:var(--mono);font-size:13px;letter-spacing:0.02em;color:var(--dim)}
+
+/* ═══ UTILITIES ════════════════════════════════════════════════════════════ */
+.divider{width:40px;height:1px;background:var(--dimmer);margin:0 0 32px}
+
+/* ═══ SPLIT PANELS ═════════════════════════════════════════════════════════ */
+.split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  margin:60px 0;
+}
+
+.split-panel{
+  padding:30px;
+  border:1px solid var(--hair);
+  position:relative;
+}
+
+/* Before panel — dimmed to signal "old" */
+.split-panel.old{
+  opacity:0.4;
+}
+
+/* After panel — accent border to signal "new" */
+.split-panel.new{
+  border-color:var(--accent-dim);
+}
+
+/* Panel header labels */
+.split-panel .panel-label{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--dim);
+  margin-bottom:20px;
+}
+.split-panel.new .panel-label{
+  color:var(--accent);
+}
+
+/* Panel heading */
+.split-panel h3{
+  font-family:var(--helv);
+  font-weight:700;
+  font-size:clamp(16px,2vw,22px);
+  letter-spacing:-0.02em;
+  color:var(--fg);
+  margin-bottom:24px;
+  line-height:1.2;
+}
+.split-panel.old h3{
+  color:var(--dim);
+}
+.split-panel.new h3{
+  color:var(--fg);
+}
+
+/* Bullet list */
+.panel-list{
+  list-style:none;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.panel-list li{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.02em;
+  color:var(--dim);
+  line-height:1.5;
+  padding-left:20px;
+  position:relative;
+}
+
+/* Bullet dash — old panel */
+.split-panel.old .panel-list li::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:8px;
+  width:8px;
+  height:1px;
+  background:var(--dimmer);
+}
+
+/* Bullet accent tick — new panel */
+.split-panel.new .panel-list li::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:8px;
+  width:8px;
+  height:1px;
+  background:var(--accent-dim);
+}
+
+/* Accent corner mark on the new panel */
+.split-panel.new::after{
+  content:'NEW';
+  position:absolute;
+  top:-1px;
+  right:20px;
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:0.2em;
+  color:var(--accent);
+  background:var(--bg);
+  padding:0 6px;
+  line-height:2px;
+}
+
+/* Old panel corner mark */
+.split-panel.old::before{
+  content:'BEFORE';
+  position:absolute;
+  top:-1px;
+  left:16px;
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:0.16em;
+  color:var(--dimmer);
+  background:var(--bg);
+  padding:0 6px;
+  line-height:2px;
+}
+
+/* Stagger reveal for list items */
+.visible .panel-list li{
+  animation:fadeUp 0.4s ease both;
+}
+.visible .panel-list li:nth-child(1){animation-delay:0.15s}
+.visible .panel-list li:nth-child(2){animation-delay:0.25s}
+.visible .panel-list li:nth-child(3){animation-delay:0.35s}
+.visible .panel-list li:nth-child(4){animation-delay:0.45s}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ═══ RESPONSIVE ═══════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  .section{padding:80px 24px}
+  .split{grid-template-columns:1fr;gap:30px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ COMPARISON SECTION ════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-wide">
+
+    <div class="label">02 // Alert Triage</div>
+    <div class="divider"></div>
+    <h2>How we triage alerts</h2>
+    <p class="body">Moving from reactive firefighting to a structured, signal-driven process. The new approach reduces mean time to resolution and eliminates noise before it reaches the on-call engineer.</p>
+
+    <!-- Split panel comparison -->
+    <div class="split">
+
+      <!-- Left: Before (old, dimmed) -->
+      <div class="split-panel old">
+        <div class="panel-label">Before</div>
+        <h3>Manual, reactive triage</h3>
+        <ul class="panel-list">
+          <li>Every alert pages the on-call engineer regardless of severity or context</li>
+          <li>Runbooks lived in Confluence — outdated, hard to find under pressure</li>
+          <li>No deduplication: related alerts fired separately, flooding Slack channels</li>
+          <li>Post-incident reviews tracked in a spreadsheet, rarely revisited or actioned</li>
+        </ul>
+      </div>
+
+      <!-- Right: After (accent-bordered) -->
+      <div class="split-panel new">
+        <div class="panel-label">After</div>
+        <h3>Automated, signal-driven triage</h3>
+        <ul class="panel-list">
+          <li>Alerts route through severity rules — P3 and below auto-silence during off-hours</li>
+          <li>Inline runbook links embedded in alert payloads, versioned alongside the service</li>
+          <li>Correlation engine groups related signals into a single incident record</li>
+          <li>Every closed incident writes a structured timeline to the shared knowledge base</li>
+        </ul>
+      </div>
+
+    </div><!-- /.split -->
+
+  </div><!-- /.section-wide -->
+</section>
+
+<!-- ═══ SCROLL OBSERVER ═══════════════════════════════════════════════════ -->
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

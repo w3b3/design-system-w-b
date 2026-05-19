@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "background:#fff removed from fixed output",
+      "passed": true,
+      "evidence": "clean"
+    },
+    {
+      "text": "border-radius removed from fixed output",
+      "passed": true,
+      "evidence": "clean"
+    },
+    {
+      "text": "box-shadow removed from fixed output",
+      "passed": true,
+      "evidence": "clean"
+    },
+    {
+      "text": "color:blue removed from fixed output",
+      "passed": true,
+      "evidence": "clean"
+    },
+    {
+      "text": "#0e0e0e or var(--bg) present in fixed output",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "Design token colors used for text",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "review.md file exists",
+      "passed": true,
+      "evidence": "exists"
+    },
+    {
+      "text": "review.md lists \u22654 violations (0 found)",
+      "passed": true,
+      "evidence": "16 ### headings found"
+    }
+  ]
+}

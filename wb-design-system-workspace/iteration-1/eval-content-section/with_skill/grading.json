@@ -1,0 +1,34 @@
+{
+  "expectations": [
+    {
+      "text": ".split-panel.old and .split-panel.new present",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "opacity: 0.4 on old panel",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "accent-dim used for new panel border",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "Monospace font for bullet points",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "Dark background used, not light theme",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "Panel labels use uppercase monospace",
+      "passed": true,
+      "evidence": "found"
+    }
+  ]
+}

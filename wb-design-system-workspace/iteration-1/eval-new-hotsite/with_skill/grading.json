@@ -1,0 +1,54 @@
+{
+  "expectations": [
+    {
+      "text": "Uses #0e0e0e or var(--bg) as background",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "Google Fonts JetBrains Mono import present",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "Section label '01 // ' numbering pattern",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "IntersectionObserver present",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "linkedin.com/in/brasileiro link",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "No border-radius on cards (50% for circles is ok)",
+      "passed": true,
+      "evidence": "clean"
+    },
+    {
+      "text": "No extra hue colors outside token palette",
+      "passed": true,
+      "evidence": "clean"
+    },
+    {
+      "text": ".flow-chain or .flow-step classes present",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": ".card class present",
+      "passed": true,
+      "evidence": "found"
+    },
+    {
+      "text": "clamp() used for heading sizes",
+      "passed": true,
+      "evidence": "found"
+    }
+  ]
+}

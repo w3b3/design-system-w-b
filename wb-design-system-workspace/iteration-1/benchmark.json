@@ -1,0 +1,73 @@
+{
+  "skill_name": "wb-design-system",
+  "configurations": [
+    {
+      "name": "with_skill",
+      "evals": [
+        {
+          "eval_name": "eval-new-hotsite",
+          "pass_rate": 1.0,
+          "passed": 10,
+          "total": 10,
+          "duration_seconds": 114.3,
+          "total_tokens": 32860
+        },
+        {
+          "eval_name": "eval-content-section",
+          "pass_rate": 1.0,
+          "passed": 6,
+          "total": 6,
+          "duration_seconds": 60.5,
+          "total_tokens": 28670
+        },
+        {
+          "eval_name": "eval-subtle-violation",
+          "pass_rate": 1.0,
+          "passed": 8,
+          "total": 8,
+          "duration_seconds": 49.3,
+          "total_tokens": 21204
+        }
+      ],
+      "summary": {
+        "avg_pass_rate": 1.0,
+        "avg_duration_seconds": 74.7,
+        "avg_total_tokens": 27578.0
+      }
+    },
+    {
+      "name": "without_skill",
+      "evals": [
+        {
+          "eval_name": "eval-new-hotsite",
+          "pass_rate": 1.0,
+          "passed": 10,
+          "total": 10,
+          "duration_seconds": 127.0,
+          "total_tokens": 42912
+        },
+        {
+          "eval_name": "eval-content-section",
+          "pass_rate": 1.0,
+          "passed": 6,
+          "total": 6,
+          "duration_seconds": 59.9,
+          "total_tokens": 26950
+        },
+        {
+          "eval_name": "eval-subtle-violation",
+          "pass_rate": 1.0,
+          "passed": 8,
+          "total": 8,
+          "duration_seconds": 66.7,
+          "total_tokens": 38302
+        }
+      ],
+      "summary": {
+        "avg_pass_rate": 1.0,
+        "avg_duration_seconds": 84.53333333333335,
+        "avg_total_tokens": 36054.666666666664
+      }
+    }
+  ]
+}

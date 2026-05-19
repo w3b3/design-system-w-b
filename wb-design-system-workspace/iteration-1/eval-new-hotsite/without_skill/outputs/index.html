@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Threat Intelligence Pipeline — threat-intel.w-b.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ═══ DESIGN TOKENS ═══════════════════════════════════════════════════════════
+   Source: https://design.w-b.dev
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#0e0e0e;
+  --bg2:#141414;
+  --fg:#f3f1ec;
+  --dim:rgba(243,241,236,0.35);
+  --dimmer:rgba(243,241,236,0.15);
+  --hair:rgba(243,241,236,0.08);
+  --accent:#d4a853;
+  --accent-dim:rgba(212,168,83,0.3);
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  --helv:Helvetica,"Helvetica Neue",Arial,sans-serif;
+}
+
+/* ═══ BASE ═════════════════════════════════════════════════════════════════ */
+html{scroll-behavior:smooth;background:var(--bg);color:var(--fg);font-family:var(--helv)}
+body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ═══ SECTIONS ═════════════════════════════════════════════════════════════ */
+.section{
+  min-height:100vh;
+  padding:120px 60px;
+  opacity:0;transform:translateY(30px);
+  transition:opacity 0.7s ease,transform 0.7s ease;
+}
+.section.visible{opacity:1;transform:translateY(0)}
+.section-narrow{max-width:900px;margin:0 auto}
+
+/* ═══ TYPOGRAPHY ═══════════════════════════════════════════════════════════ */
+h1{font-weight:700;font-size:clamp(42px,6vw,72px);letter-spacing:-0.04em;line-height:1.0}
+h2{font-weight:700;font-size:clamp(24px,3.5vw,40px);letter-spacing:-0.03em;line-height:1.1;margin-bottom:32px}
+h3{font-weight:700;font-size:clamp(18px,2.5vw,28px);letter-spacing:-0.02em;line-height:1.2;margin-bottom:16px}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.body{font-family:var(--helv);font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:var(--dim);max-width:680px}
+.body strong{color:var(--fg);font-weight:600}
+.mono{font-family:var(--mono);font-size:13px;letter-spacing:0.02em;color:var(--dim)}
+.accent{color:var(--accent)}
+
+/* ═══ UTILITIES ════════════════════════════════════════════════════════════ */
+.divider{width:40px;height:1px;background:var(--dimmer);margin:0 0 32px}
+
+/* ═══ FLOW CHAIN ═══════════════════════════════════════════════════════════ */
+.flow-chain{display:flex;flex-direction:column;gap:0;margin:50px 0}
+.flow-step{display:flex;align-items:center;gap:16px;padding:14px 20px;border-left:2px solid var(--hair);
+  opacity:0;transform:translateX(-20px);transition:all 0.5s ease}
+.visible .flow-step{opacity:1;transform:translateX(0)}
+.flow-step:nth-child(1){transition-delay:0.1s}
+.flow-step:nth-child(2){transition-delay:0.2s}
+.flow-step:nth-child(3){transition-delay:0.3s}
+.flow-step:nth-child(4){transition-delay:0.4s}
+.flow-step:nth-child(5){transition-delay:0.5s}
+.flow-step:nth-child(6){transition-delay:0.6s}
+.flow-step:nth-child(7){transition-delay:0.7s}
+.flow-step .step-icon{width:32px;height:32px;border-radius:50%;background:var(--bg2);border:1px solid var(--dimmer);
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--dim);flex-shrink:0}
+.flow-step .step-label{font-family:var(--mono);font-size:12px;color:var(--dim);flex:1}
+.flow-step .step-detail{font-family:var(--mono);font-size:11px;color:var(--dimmer);margin-left:auto;flex-shrink:0;text-align:right}
+.flow-step.highlight{border-left-color:var(--accent)}
+.flow-step.highlight .step-icon{border-color:var(--accent);color:var(--accent)}
+.flow-step.highlight .step-label{color:var(--accent)}
+
+/* ═══ CARDS ════════════════════════════════════════════════════════════════ */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;margin:50px 0}
+.card{padding:24px;border:1px solid var(--hair);background:var(--bg2);
+  opacity:0;transform:translateY(20px);transition:all 0.6s ease}
+.visible .card{opacity:1;transform:translateY(0)}
+.visible .card:nth-child(1){transition-delay:0.1s}
+.visible .card:nth-child(2){transition-delay:0.2s}
+.visible .card:nth-child(3){transition-delay:0.3s}
+.visible .card:nth-child(4){transition-delay:0.4s}
+.visible .card:nth-child(5){transition-delay:0.5s}
+.visible .card:nth-child(6){transition-delay:0.6s}
+.card-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dimmer);margin-bottom:14px}
+.card h4{font-family:var(--helv);font-weight:700;font-size:15px;letter-spacing:-0.01em;margin-bottom:10px}
+.card p{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.6}
+.card.accent-card{border-color:var(--accent-dim)}
+.card.accent-card .card-tag{color:var(--accent-dim)}
+.card.accent-card h4{color:var(--accent)}
+
+/* ═══ TOPOLOGY BOX ═════════════════════════════════════════════════════════ */
+.topo-box{border:1px solid var(--hair);padding:24px;position:relative;margin:20px 0}
+.topo-box .topo-title{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--dimmer);position:absolute;top:-8px;left:16px;background:var(--bg);padding:0 8px}
+.topo-items{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.topo-item{font-family:var(--mono);font-size:11px;padding:5px 12px;border:1px solid var(--dimmer);color:var(--dim)}
+.topo-item.hot{border-color:var(--accent-dim);color:var(--accent)}
+
+/* ═══ DETECTION RULE BLOCK ═════════════════════════════════════════════════ */
+.rule-block{background:var(--bg2);border:1px solid var(--hair);margin:28px 0;
+  opacity:0;transform:translateY(20px);transition:all 0.6s ease}
+.visible .rule-block{opacity:1;transform:translateY(0)}
+.visible .rule-block:nth-child(1){transition-delay:0.1s}
+.visible .rule-block:nth-child(2){transition-delay:0.25s}
+.visible .rule-block:nth-child(3){transition-delay:0.4s}
+.rule-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--hair)}
+.rule-name{font-family:var(--helv);font-weight:700;font-size:14px;letter-spacing:-0.01em}
+.rule-severity{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border:1px solid}
+.rule-severity.critical{border-color:var(--accent-dim);color:var(--accent)}
+.rule-severity.high{border-color:var(--dimmer);color:var(--dim)}
+.rule-severity.medium{border-color:var(--hair);color:var(--dimmer)}
+.rule-body{padding:16px 20px}
+.rule-body p{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.6;margin-bottom:12px}
+.rule-body p:last-child{margin-bottom:0}
+.rule-logic{font-family:var(--mono);font-size:11px;color:var(--dimmer);background:var(--bg);padding:10px 14px;border:1px solid var(--hair);line-height:1.7}
+.rule-logic .kw{color:var(--fg)}
+.rule-logic .val{color:var(--accent)}
+
+/* ═══ STAT ROW ══════════════════════════════════════════════════════════════ */
+.stat-row{display:flex;gap:0;border:1px solid var(--hair);margin:40px 0}
+.stat{flex:1;padding:24px;border-right:1px solid var(--hair);text-align:center}
+.stat:last-child{border-right:none}
+.stat-num{font-family:var(--helv);font-weight:700;font-size:clamp(28px,4vw,48px);letter-spacing:-0.04em;color:var(--fg);line-height:1}
+.stat-num.accent{color:var(--accent)}
+.stat-label{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dimmer);margin-top:8px}
+
+/* ═══ ANIMATIONS ═══════════════════════════════════════════════════════════ */
+@keyframes breathe{0%,100%{opacity:0.3}50%{opacity:1}}
+.breathe{animation:breathe 2.5s ease infinite}
+
+/* ═══ RESPONSIVE ═══════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  .section{padding:80px 24px}
+  .card-grid{grid-template-columns:1fr}
+  .stat-row{flex-direction:column}
+  .stat{border-right:none;border-bottom:1px solid var(--hair)}
+  .stat:last-child{border-bottom:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══════════════════════════════════════════════════════════════ -->
+<section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;opacity:1;transform:none">
+  <div class="label">Threat Intelligence // Pipeline Architecture</div>
+  <h1 style="margin:20px 0">Threat Intel<br><span class="accent">Pipeline</span></h1>
+  <p class="mono" style="margin-top:8px;max-width:540px;text-align:center;line-height:1.7">How raw threat data moves from the open internet into actionable detection — ingestion, normalization, enrichment, and rule-driven response.</p>
+  <div style="margin-top:60px;display:flex;align-items:center;gap:16px">
+    <div style="width:8px;height:8px;border-radius:50%;background:var(--accent)" class="breathe"></div>
+    <span class="mono" style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase">Pipeline Active</span>
+  </div>
+</section>
+
+<!-- ═══ SECTION 01 — DATA INGESTION ══════════════════════════════════════ -->
+<section class="section">
+  <div class="section-narrow">
+    <div class="label">01 // Data Ingestion</div>
+    <div class="divider"></div>
+    <h2>Feeding the Pipeline</h2>
+    <p class="body">Threat intelligence begins with <strong>continuous ingestion</strong> from heterogeneous sources — open-source feeds, commercial subscriptions, honeypots, and internal telemetry. Each source arrives in a different format, at a different cadence, with a different trust score.</p>
+    <p class="body" style="margin-top:20px">The ingestion layer is responsible for <strong>collection, transport, and initial triage</strong> only. No normalization happens here — fidelity to the original source is preserved so downstream steps can make informed decisions about provenance.</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num accent">47</div>
+        <div class="stat-label">Active Feeds</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2.4M</div>
+        <div class="stat-label">Indicators / Day</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">38ms</div>
+        <div class="stat-label">Avg Ingest Latency</div>
+      </div>
+    </div>
+
+    <div class="topo-box" style="margin-bottom:0">
+      <div class="topo-title">Source Categories</div>
+      <div class="topo-items">
+        <div class="topo-item hot">OSINT Feeds</div>
+        <div class="topo-item hot">Commercial TI</div>
+        <div class="topo-item">Honeypot Logs</div>
+        <div class="topo-item">Sensor Telemetry</div>
+        <div class="topo-item">ISAC Sharing</div>
+        <div class="topo-item">Shodan / Censys</div>
+        <div class="topo-item hot">Internal SIEM</div>
+        <div class="topo-item">Dark Web Monitors</div>
+      </div>
+    </div>
+
+    <div class="flow-chain">
+      <div class="flow-step">
+        <div class="step-icon">01</div>
+        <div class="step-label">Pull scheduler triggers collection across all registered feed endpoints</div>
+        <div class="step-detail">every 5 min</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon">02</div>
+        <div class="step-label">Transport layer buffers raw payloads into Kafka topics per source type</div>
+        <div class="step-detail">async</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon">03</div>
+        <div class="step-label">Deduplication check against a 72-hour rolling bloom filter</div>
+        <div class="step-detail">&lt; 1ms</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon">04</div>
+        <div class="step-label">Source trust score attached to each record from the feed registry</div>
+        <div class="step-detail">0.0 – 1.0</div>
+      </div>
+      <div class="flow-step highlight">
+        <div class="step-icon">05</div>
+        <div class="step-label">High-volume burst protection — adaptive rate limiting per source</div>
+        <div class="step-detail">circuit breaker</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon">06</div>
+        <div class="step-label">Raw records written to cold storage (S3) and forwarded to normalization queue</div>
+        <div class="step-detail">dual write</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 02 — NORMALIZATION & ENRICHMENT ══════════════════════════ -->
+<section class="section">
+  <div class="section-narrow">
+    <div class="label">02 // Normalization &amp; Enrichment</div>
+    <div class="divider"></div>
+    <h2>From Raw Signal to Structured Intelligence</h2>
+    <p class="body">Raw indicators arrive in dozens of incompatible formats — STIX, JSON, CSV, syslog, vendor-specific schemas. The normalization layer converts everything into a <strong>canonical indicator object</strong>. Enrichment then appends context that no single source provides alone.</p>
+    <p class="body" style="margin-top:20px">Enrichment happens in parallel pipelines to maintain throughput. Each enrichment service is independently scalable and <strong>fails gracefully</strong> — a missing geolocation annotation never blocks a critical IOC from reaching detection.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-tag">Normalization</div>
+        <h4>Schema Mapping</h4>
+        <p>Incoming records are mapped to an internal canonical schema using per-source adapters. Field names, date formats, and type coercions are handled here. Output is always a typed indicator object with required fields guaranteed.</p>
+      </div>
+      <div class="card">
+        <div class="card-tag">Normalization</div>
+        <h4>Type Classification</h4>
+        <p>Each indicator is classified by type — IP, domain, URL, file hash, email, CVE, YARA pattern. Type drives which enrichment services are invoked and which detection rules are eligible to match against this record.</p>
+      </div>
+      <div class="card">
+        <div class="card-tag">Enrichment</div>
+        <h4>Geolocation &amp; ASN</h4>
+        <p>IP indicators are annotated with country, region, city, ASN, and hosting provider data using MaxMind + CAIDA datasets updated weekly. Datacenter vs. residential classification informs risk scoring.</p>
+      </div>
+      <div class="card">
+        <div class="card-tag">Enrichment</div>
+        <h4>Threat Actor Correlation</h4>
+        <p>Indicators are cross-referenced against a graph of known threat actor TTPs and campaigns using MITRE ATT&amp;CK mappings. A match appends actor attribution, campaign ID, and associated technique IDs to the record.</p>
+      </div>
+      <div class="card accent-card">
+        <div class="card-tag">Enrichment — Critical</div>
+        <h4>Confidence Scoring</h4>
+        <p>A composite confidence score (0–100) is computed from source trust, indicator age, corroboration count across independent sources, and historical false-positive rate. This score gates rule evaluation priority.</p>
+      </div>
+      <div class="card">
+        <div class="card-tag">Enrichment</div>
+        <h4>Historical Context</h4>
+        <p>Each indicator is checked against the last 90 days of the internal TI store. Recurrence, velocity change, and associated incident history are appended. A new indicator seen three times in 24 hours is automatically escalated.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 03 — DETECTION RULES ═════════════════════════════════════ -->
+<section class="section">
+  <div class="section-narrow">
+    <div class="label">03 // Detection Rules</div>
+    <div class="divider"></div>
+    <h2>Intelligence into Action</h2>
+    <p class="body">Enriched indicators flow into a rule evaluation engine that matches against both <strong>static signatures</strong> and <strong>behavioral logic</strong>. Rules are versioned, tested in shadow mode before promotion, and continuously tuned using feedback from analyst triage.</p>
+    <p class="body" style="margin-top:20px">Each rule defines its own confidence threshold, source trust minimum, and indicator type constraints. A rule only fires when the incoming indicator satisfies all conditions — reducing alert fatigue while maintaining high-fidelity detection.</p>
+
+    <div style="margin-top:50px">
+
+      <div class="rule-block">
+        <div class="rule-header">
+          <div class="rule-name">C2 Beacon — Known Malicious IP</div>
+          <div class="rule-severity critical">Critical</div>
+        </div>
+        <div class="rule-body">
+          <p>Fires when an internal host initiates outbound connections to an IP indicator with a confidence score above threshold and verified C2 attribution. Triggers an automated host isolation workflow and a P1 alert to the on-call analyst.</p>
+          <div class="rule-logic">
+<span class="kw">MATCH</span> indicator.type = <span class="val">"ip"</span>
+  <span class="kw">AND</span> indicator.tags <span class="kw">CONTAINS</span> <span class="val">"c2"</span>
+  <span class="kw">AND</span> indicator.confidence &gt;= <span class="val">80</span>
+  <span class="kw">AND</span> indicator.source_trust &gt;= <span class="val">0.7</span>
+<span class="kw">ACTION</span>: isolate_host, page_oncall, open_incident(P1)</div>
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-header">
+          <div class="rule-name">DNS Lookup — Newly Registered Domain</div>
+          <div class="rule-severity high">High</div>
+        </div>
+        <div class="rule-body">
+          <p>Detects DNS resolution attempts to domains registered within the past 14 days that appear on a TI feed. Newly registered domains are a strong signal for phishing infrastructure and fast-flux C2. The rule suppresses after first alert per host per domain within a 4-hour window.</p>
+          <div class="rule-logic">
+<span class="kw">MATCH</span> indicator.type = <span class="val">"domain"</span>
+  <span class="kw">AND</span> indicator.age_days &lt; <span class="val">14</span>
+  <span class="kw">AND</span> indicator.confidence &gt;= <span class="val">60</span>
+  <span class="kw">AND NOT</span> suppressed(host, domain, <span class="val">4h</span>)
+<span class="kw">ACTION</span>: block_dns, alert(HIGH), log_full_pcap</div>
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-header">
+          <div class="rule-name">File Hash — Known Malware Variant</div>
+          <div class="rule-severity medium">Medium</div>
+        </div>
+        <div class="rule-body">
+          <p>Matches SHA-256 hashes observed on an endpoint against a curated malware hash list sourced from VirusTotal, MalwareBazaar, and internal sandbox detonations. Medium severity reflects that file presence may precede execution — the rule initiates a forensic collection task without blocking the host.</p>
+          <div class="rule-logic">
+<span class="kw">MATCH</span> indicator.type = <span class="val">"file_hash"</span>
+  <span class="kw">AND</span> indicator.hash_algo = <span class="val">"sha256"</span>
+  <span class="kw">AND</span> indicator.confidence &gt;= <span class="val">50</span>
+  <span class="kw">AND</span> indicator.vt_detections &gt;= <span class="val">3</span>
+<span class="kw">ACTION</span>: collect_forensics, alert(MEDIUM), quarantine_file</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ OUTRO ═════════════════════════════════════════════════════════════ -->
+<section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:60vh">
+  <h2>Intelligence at Pipeline Speed</h2>
+  <p class="mono" style="margin-top:30px;max-width:540px;text-align:center;line-height:1.7">From raw feed to fired detection rule in under 200ms — threat intelligence is only useful when it arrives before the attacker does.</p>
+  <div style="margin-top:60px;display:flex;align-items:center;gap:40px;flex-wrap:wrap;justify-content:center">
+    <div style="text-align:center">
+      <div style="font-family:var(--helv);font-weight:700;font-size:32px;letter-spacing:-0.03em;color:var(--accent)">47</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dimmer);margin-top:6px">Feed Sources</div>
+    </div>
+    <div style="width:1px;height:40px;background:var(--hair)"></div>
+    <div style="text-align:center">
+      <div style="font-family:var(--helv);font-weight:700;font-size:32px;letter-spacing:-0.03em">2.4M</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dimmer);margin-top:6px">Indicators / Day</div>
+    </div>
+    <div style="width:1px;height:40px;background:var(--hair)"></div>
+    <div style="text-align:center">
+      <div style="font-family:var(--helv);font-weight:700;font-size:32px;letter-spacing:-0.03em">&lt;200ms</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dimmer);margin-top:6px">End-to-End Latency</div>
+    </div>
+  </div>
+  <a href="https://linkedin.com/in/brasileiro" target="_blank" rel="noopener"
+     style="display:inline-block;margin-top:70px;font-family:var(--mono);font-size:12px;letter-spacing:0.12em;color:var(--dim);text-decoration:none;border-bottom:1px solid var(--dimmer);padding-bottom:2px;transition:color 0.2s,border-color 0.2s"
+     onmouseover="this.style.color='var(--fg)';this.style.borderColor='var(--fg)'"
+     onmouseout="this.style.color='var(--dim)';this.style.borderColor='var(--dimmer)'">Daniel Brasileiro</a>
+</section>
+
+<!-- ═══ SCROLL OBSERVER ═══════════════════════════════════════════════════ -->
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

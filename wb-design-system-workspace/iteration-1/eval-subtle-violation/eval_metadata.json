@@ -1,0 +1,15 @@
+{
+  "eval_id": 2,
+  "eval_name": "violation-review-and-fix",
+  "prompt": "I have this page snippet and want you to review it and fix any design system violations (white background, #333 text, border-radius, box-shadow, Arial font, color:blue accent).",
+  "assertions": [
+    {"id": "removes-white-bg", "description": "background:#fff not present in fixed output"},
+    {"id": "removes-border-radius", "description": "border-radius property not present in fixed.html"},
+    {"id": "removes-box-shadow", "description": "box-shadow property not present in fixed.html"},
+    {"id": "removes-blue-accent", "description": "color:blue or #0000ff not present in fixed.html"},
+    {"id": "applies-dark-bg-token", "description": "#0e0e0e or var(--bg) present in fixed.html"},
+    {"id": "applies-fg-for-text", "description": "#f3f1ec or var(--fg) or var(--dim) used for text in fixed.html"},
+    {"id": "review-md-exists", "description": "review.md file exists with violation descriptions"},
+    {"id": "review-identifies-all-violations", "description": "review.md mentions at least 4 of the 6 violations in the snippet"}
+  ]
+}
