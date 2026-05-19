@@ -37,9 +37,50 @@
   --helv:Helvetica,"Helvetica Neue",Arial,sans-serif;
 }
 
+/* Light theme */
+:root[data-theme="light"]{
+  --bg:#f6f2ea;
+  --bg2:#ffffff;
+  --fg:#171614;
+  --dim:rgba(23,22,20,0.78);
+  --dimmer:rgba(23,22,20,0.55);
+  --hair:rgba(23,22,20,0.18);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme]){
+    --bg:#f6f2ea;
+    --bg2:#ffffff;
+    --fg:#171614;
+    --dim:rgba(23,22,20,0.78);
+    --dimmer:rgba(23,22,20,0.55);
+    --hair:rgba(23,22,20,0.18);
+  }
+}
+@media (prefers-contrast: more) and (prefers-color-scheme: light){
+  :root:not([data-theme]),
+  :root[data-theme="light"]{
+    --dim:rgba(23,22,20,0.9);
+    --dimmer:rgba(23,22,20,0.72);
+    --hair:rgba(23,22,20,0.28);
+  }
+}
+
 /* ═══ BASE ═════════════════════════════════════════════════════════════════ */
 html{scroll-behavior:smooth;background:var(--bg);color:var(--fg);font-family:var(--helv);font-size:16px}
 body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+/* Theme toggle */
+.theme-toggle{
+  position:fixed;top:18px;right:18px;z-index:50;
+  display:inline-flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:999px;
+  border:1px solid var(--hair);background:color-mix(in srgb, var(--bg2) 92%, transparent);
+  color:var(--dim);font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;user-select:none;transition:color 0.2s,border-color 0.2s,background 0.2s,transform 0.2s;
+}
+.theme-toggle:hover{color:var(--fg);border-color:var(--dimmer);transform:translateY(-1px)}
+.theme-toggle .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.theme-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
 /* ═══ SECTIONS ═════════════════════════════════════════════════════════════ */
 .section{
@@ -187,6 +228,10 @@ h3{font-weight:700;font-size:clamp(18px,2.5vw,28px);letter-spacing:-0.02em;line-
 </style>
 </head>
 <body>
+  <button class="theme-toggle" type="button" id="themeToggle" aria-label="Toggle theme">
+    <span class="dot" aria-hidden="true"></span>
+    <span id="themeToggleLabel">Theme</span>
+  </button>
 
 <!-- ═══ HERO ═══════════════════════════════════════════════════════════════ -->
 <section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;opacity:1;transform:none">
@@ -224,6 +269,30 @@ h3{font-weight:700;font-size:clamp(18px,2.5vw,28px);letter-spacing:-0.02em;line-
 
 <!-- ═══ SCROLL OBSERVER ═══════════════════════════════════════════════════ -->
 <script>
+const THEME_KEY = 'w-b:theme';
+function applyTheme(next){
+  if (!next || next === 'system') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', next);
+  try{ localStorage.setItem(THEME_KEY, next || 'system'); }catch{}
+  const label = document.getElementById('themeToggleLabel');
+  if (label){
+    const current = document.documentElement.getAttribute('data-theme') || 'system';
+    label.textContent = current === 'light' ? 'Light' : (current === 'dark' ? 'Dark' : 'System');
+  }
+}
+function cycleTheme(){
+  const current = document.documentElement.getAttribute('data-theme') || 'system';
+  const next = current === 'system' ? 'light' : (current === 'light' ? 'dark' : 'system');
+  applyTheme(next);
+}
+try{
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved && saved !== 'system') document.documentElement.setAttribute('data-theme', saved);
+}catch{}
+applyTheme(document.documentElement.getAttribute('data-theme') || 'system');
+const themeToggle = document.getElementById('themeToggle');
+if (themeToggle) themeToggle.addEventListener('click', cycleTheme);
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) entry.target.classList.add('visible');
