@@ -1,0 +1,70 @@
+/*
+ * w-b.dev Design System — CSS Tokens
+ * https://design.w-b.dev
+ * https://github.com/w3b3/design-system-w-b
+ */
+
+:root {
+  /* Backgrounds */
+  --bg: #0e0e0e;
+  --bg2: #141414;
+
+  /* Foreground — warm paper, never pure white */
+  --fg: #f3f1ec;
+
+  /* Opacity ladder */
+  /* Note: keep body text >= 4.5:1 contrast on --bg */
+  --dim: rgba(243, 241, 236, 0.5); /* body text, labels */
+  --dimmer: rgba(243, 241, 236, 0.32); /* meta, timestamps, borders */
+  --hair: rgba(243, 241, 236, 0.14); /* subtle dividers, card edges */
+
+  /* Accent — the only non-grayscale color */
+  --accent: #d4a853;
+  --accent-dim: rgba(212, 168, 83, 0.3);
+
+  /* Typography — two faces only */
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --helv: Helvetica, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Light theme */
+:root[data-theme="light"] {
+  --bg: #f6f2ea;
+  --bg2: #ffffff;
+
+  /* Foreground — warm ink */
+  --fg: #171614;
+
+  /* Opacity ladder (targets AA on --bg for body text) */
+  --dim: rgba(23, 22, 20, 0.78); /* body text, labels */
+  --dimmer: rgba(23, 22, 20, 0.55); /* meta, timestamps, borders */
+  --hair: rgba(23, 22, 20, 0.18); /* subtle dividers, card edges */
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: #f6f2ea;
+    --bg2: #ffffff;
+    --fg: #171614;
+    --dim: rgba(23, 22, 20, 0.78);
+    --dimmer: rgba(23, 22, 20, 0.55);
+    --hair: rgba(23, 22, 20, 0.18);
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --dim: rgba(243, 241, 236, 0.62);
+    --dimmer: rgba(243, 241, 236, 0.45);
+    --hair: rgba(243, 241, 236, 0.22);
+  }
+}
+
+@media (prefers-contrast: more) and (prefers-color-scheme: light) {
+  :root:not([data-theme]),
+  :root[data-theme="light"] {
+    --dim: rgba(23, 22, 20, 0.9);
+    --dimmer: rgba(23, 22, 20, 0.72);
+    --hair: rgba(23, 22, 20, 0.28);
+  }
+}

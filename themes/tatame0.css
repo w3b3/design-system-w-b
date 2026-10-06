@@ -1,0 +1,26 @@
+/* Blueprint theme: tatame0 — Tatame Red (the default and flagship theme).
+   Also carries tatame0's domain palette: IBJJF youth & adult belts. */
+:root {
+  --t-accent:       #e5121f;
+  --t-accent-deep:  #a60a14;
+  --t-accent-tint:  #fdeaea;
+  --t-accent-grid:  #f0e4e4;
+
+  --t-belt-white:         #e8e8e8;
+  --t-belt-grey-white:    #d0d0d0;
+  --t-belt-grey:          #9aa0a6;
+  --t-belt-grey-black:    #6b6b6b;
+  --t-belt-yellow-white:  #f9e07a;
+  --t-belt-yellow:        #f4c430;
+  --t-belt-yellow-black:  #c49b20;
+  --t-belt-orange-white:  #f9c07a;
+  --t-belt-orange:        #f08c00;
+  --t-belt-orange-black:  #c06c00;
+  --t-belt-green-white:   #8fd48f;
+  --t-belt-green:         #2e9e44;
+  --t-belt-green-black:   #207030;
+  --t-belt-blue:          #1f6feb;
+  --t-belt-purple:        #8957e5;
+  --t-belt-brown:         #8b5a2b;
+  --t-belt-black:         #111317;
+}

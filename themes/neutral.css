@@ -1,0 +1,7 @@
+/* Blueprint theme: neutral — ink only, no color accent */
+:root {
+  --t-accent:       #0a0a0a;
+  --t-accent-deep:  #000000;
+  --t-accent-tint:  #f5f5f5;
+  --t-accent-grid:  #efefef;
+}
