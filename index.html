@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light only" />
+  <title>w-b.dev Design System</title>
+  <meta name="description" content="Blueprint: the w-b.dev design system. White paper, one accent, black ink, hard corners, solid offset shadows. Flagship theme: tatame0." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800;900&family=Space+Mono:wght@400;700&family=Archivo:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="./tokens.css" />
+  <link rel="stylesheet" href="./themes/tatame0.css" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:var(--t-paper);color:var(--t-ink);font-family:var(--t-font-body);
+      line-height:var(--t-leading-body);
+      background-image:var(--t-bg-grid);background-size:var(--t-grid-size) var(--t-grid-size);
+    }
+    .wrap{max-width:var(--t-maxw);margin:0 auto;padding:0 var(--t-gutter)}
+    .lbl{font-family:var(--t-font-mono);font-size:var(--t-text-label);font-weight:700;
+      letter-spacing:var(--t-tracking-label);text-transform:uppercase;color:var(--t-accent);
+      display:inline-flex;align-items:center;gap:.6em;margin-bottom:14px}
+    .lbl::before{content:"";width:26px;border-top:var(--t-line) solid var(--t-accent)}
+    h1,h2,h3{font-family:var(--t-font-display);font-weight:var(--t-weight-black);
+      line-height:var(--t-leading-display);letter-spacing:var(--t-tracking-display);text-transform:uppercase}
+    .top{background:var(--t-ink);color:var(--t-on-ink);border-bottom:var(--t-line) solid var(--t-accent);
+      padding:54px 0 46px;position:relative}
+    .top h1{font-size:var(--t-text-hero);color:#fff}
+    .top h1 .a{color:var(--t-accent)}
+    .top p{font-family:var(--t-font-mono);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--t-on-ink-dim);margin-top:10px}
+    section{padding:var(--t-section-y) 0;border-bottom:var(--t-divider);position:relative}
+    section h2{font-size:var(--t-text-h2);margin-bottom:8px}
+    .sub{color:var(--t-muted);max-width:60ch;margin-bottom:30px}
+    .cross{position:absolute;top:18px;right:18px;width:14px;height:14px;color:var(--t-accent)}
+
+    /* ---- Accent picker --------------------------------------------------- */
+    .picker-bar{
+      background:var(--t-ink);border-bottom:var(--t-line) solid var(--t-accent);
+      padding:18px 0;position:sticky;top:0;z-index:100
+    }
+    .picker-inner{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+    .picker-inner label{font-family:var(--t-font-mono);font-size:.75rem;text-transform:uppercase;
+      letter-spacing:.12em;color:var(--t-on-ink-dim)}
+    #accentPicker{width:42px;height:32px;padding:2px;border:var(--t-line) solid var(--t-on-ink-dim);
+      background:transparent;cursor:pointer;border-radius:0}
+    .swatches-mini{display:flex;gap:8px}
+    .sw-mini{width:32px;height:32px;border:1.5px solid rgba(255,255,255,.15)}
+    .sw-mini[data-role="accent"]{background:var(--t-accent)}
+    .sw-mini[data-role="deep"]{background:var(--t-accent-deep)}
+    .sw-mini[data-role="tint"]{background:var(--t-accent-tint)}
+    #pickerCode{font-family:var(--t-font-mono);font-size:.72rem;color:var(--t-accent);
+      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+      padding:8px 12px;white-space:pre;cursor:pointer;flex:1;min-width:240px}
+    #pickerCode:hover{border-color:var(--t-accent)}
+    .copy-hint{font-family:var(--t-font-mono);font-size:.65rem;color:var(--t-on-ink-dim);letter-spacing:.08em}
+
+    /* ---- Color section --------------------------------------------------- */
+    .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px}
+    .sw{border:var(--t-border)}
+    .sw .chip{height:96px}
+    .sw .meta{padding:10px 12px;font-family:var(--t-font-mono);font-size:.72rem}
+    .sw .meta b{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+    .sw .meta span{color:var(--t-muted)}
+
+    /* ---- Type ------------------------------------------------------------ */
+    .specimen{border:var(--t-border);padding:22px;margin-bottom:16px}
+    .specimen .tag{font-family:var(--t-font-mono);font-size:.68rem;color:var(--t-accent);text-transform:uppercase;letter-spacing:.1em}
+    .disp{font-family:var(--t-font-display);font-weight:900;text-transform:uppercase;line-height:.92}
+    .row{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+
+    /* ---- Buttons --------------------------------------------------------- */
+    .btn{font-family:var(--t-font-display);font-weight:var(--t-weight-display);text-transform:uppercase;
+      letter-spacing:.02em;font-size:1.05rem;display:inline-flex;align-items:center;gap:.6em;
+      background:var(--t-accent);color:#fff;padding:16px 26px;border:var(--t-border);box-shadow:var(--t-shadow-ink);
+      transition:transform var(--t-dur-fast) ease, box-shadow var(--t-dur-fast) ease;cursor:pointer;text-decoration:none}
+    .btn:hover{transform:translate(-2px,-2px);box-shadow:var(--t-shadow-hover)}
+    .btn:active{transform:translate(3px,3px);box-shadow:var(--t-shadow-sm)}
+    .btn.ghost{background:#fff;color:var(--t-ink);box-shadow:var(--t-shadow)}
+    .btn.ghost:hover{box-shadow:9px 9px 0 var(--t-accent)}
+    .btn.sm{font-size:.85rem;padding:11px 16px;box-shadow:var(--t-shadow-sm)}
+
+    /* ---- Cards ----------------------------------------------------------- */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:26px}
+    .card{background:#fff;border:var(--t-border);padding:24px;box-shadow:var(--t-shadow)}
+    .card.ink{background:var(--t-ink);color:#fff;box-shadow:var(--t-shadow)}
+    .card h3{font-size:var(--t-text-h3)}
+    .card p{font-size:.95rem;color:var(--t-muted);margin-top:6px}
+    .card.ink p{color:var(--t-on-ink-dim)}
+
+    /* ---- Motifs ---------------------------------------------------------- */
+    .dim-line{display:flex;align-items:center;gap:0;font-family:var(--t-font-mono);font-size:.72rem;color:var(--t-accent);margin-top:8px}
+    .dim-line .bar{height:0;border-top:var(--t-line) dashed var(--t-accent);flex:1}
+    .seg{position:relative;height:24px;width:200px;border:var(--t-line) solid var(--t-ink);display:flex;justify-content:flex-end}
+    .seg .fill{background:var(--t-accent);width:60%}
+    .seg .blk{width:48px;background:var(--t-ink);display:flex;align-items:center;gap:5px;justify-content:center}
+    .seg .tick{width:4px;height:14px;background:#fff}
+    .draw path{stroke-dasharray:100;stroke-dashoffset:100;animation:draw var(--t-dur-draw) var(--t-ease-draw) forwards}
+    @keyframes draw{to{stroke-dashoffset:0}}
+    .grid-demo{height:120px;border:var(--t-border);background-image:var(--t-bg-grid);background-size:var(--t-grid-size) var(--t-grid-size)}
+
+    .btn:active{transform:translate(3px,3px);box-shadow:var(--t-shadow-active)}
+    .btn.danger{background:#fff;color:var(--t-accent);border-color:var(--t-accent);box-shadow:var(--t-shadow-sm)}
+    .btn .arrow{transition:transform .15s ease}
+    .btn:hover .arrow{transform:translateX(4px)}
+    .btn:focus-visible,.preset:focus-visible,.input-ctrl:focus-visible,.files a:focus-visible{outline:var(--t-line) solid var(--t-accent);outline-offset:3px}
+
+    /* ---- Ticker ---------------------------------------------------------- */
+    .ticker{background:var(--t-ink);color:#fff;font-family:var(--t-font-mono);font-size:.74rem;
+      letter-spacing:.1em;text-transform:uppercase;overflow:hidden;border-bottom:var(--t-line) solid var(--t-accent)}
+    .ticker .track{display:flex;gap:3rem;white-space:nowrap;padding:9px 0;width:max-content;animation:marquee var(--t-marquee) linear infinite}
+    .ticker b,.ticker .dot{color:var(--t-accent)}
+    @keyframes marquee{to{transform:translateX(-50%)}}
+
+    /* ---- Theme presets --------------------------------------------------- */
+    .presets{display:flex;gap:8px;flex-wrap:wrap}
+    .preset{font-family:var(--t-font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;
+      background:transparent;color:var(--t-on-ink);border:1.5px solid var(--t-on-ink-dim);padding:7px 10px;cursor:pointer;
+      display:inline-flex;align-items:center;gap:8px}
+    .preset i{width:12px;height:12px;display:inline-block;border:1px solid rgba(255,255,255,.4)}
+    .preset[aria-pressed="true"]{border-color:var(--t-accent);color:#fff;background:rgba(255,255,255,.08)}
+
+    /* ---- Forms ----------------------------------------------------------- */
+    .form-demo{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;border:var(--t-border);padding:24px;background:#fff}
+    .field-lbl{display:block;font-family:var(--t-font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t-muted);margin-bottom:6px}
+    .input-ctrl{width:100%;padding:10px 14px;background:#fff;border:var(--t-border);border-radius:0;font-family:var(--t-font-body);font-size:1rem;color:var(--t-ink);outline:none}
+    .input-ctrl:focus{border-color:var(--t-accent)}
+
+    /* ---- tatame0 theme --------------------------------------------------- */
+    .brand-demo{display:inline-flex;align-items:center;font-family:var(--t-font-wordmark);font-weight:900;font-size:2.4rem;text-transform:lowercase;letter-spacing:-.055em;color:var(--t-ink);margin:6px 0 26px}
+    .brand-demo svg{width:44px;height:44px;margin-right:14px}
+    .brand-demo .zero{color:#e5121f;font-size:.92em;margin-left:-.03em;display:inline-block}
+    .belts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+    .belt-card{border:var(--t-border);padding:10px;background:#fff;text-align:center}
+    .belt-preview{height:20px;width:100%;border:1px solid #111;margin-bottom:8px;position:relative}
+    .belt-preview .sleeve{position:absolute;right:0;top:0;width:32px;height:100%;background:#111317}
+    .belt-card span{font-family:var(--t-font-mono);font-size:.68rem;text-transform:uppercase;display:block}
+    .belt-card code{display:block;font-size:.64rem;margin-top:2px}
+
+    /* ---- Usage & footer -------------------------------------------------- */
+    pre.snippet{font-family:var(--t-font-mono);font-size:.78rem;background:var(--t-ink);color:#f3f3f3;padding:18px 20px;
+      border:var(--t-border);box-shadow:var(--t-shadow);overflow-x:auto;white-space:pre;margin-bottom:30px;line-height:1.6}
+    .files{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+    .files a{color:inherit;text-decoration:none;display:block}
+    .files .card{height:100%;transition:transform var(--t-dur-fast) ease,box-shadow var(--t-dur-fast) ease}
+    .files .card h3{font-size:1.15rem;text-transform:none;font-family:var(--t-font-mono);font-weight:700;letter-spacing:0}
+    .files a:hover .card{transform:translate(-2px,-2px);box-shadow:var(--t-shadow-hover-red)}
+    footer{background:var(--t-ink);color:var(--t-on-ink-dim);border-top:var(--t-line) solid var(--t-accent);padding:40px 0;
+      font-family:var(--t-font-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+    footer .wrap{display:flex;gap:18px 30px;flex-wrap:wrap;justify-content:space-between}
+    footer a{color:#fff;text-decoration:none;border-bottom:1.5px solid var(--t-accent);padding-bottom:2px}
+    @media(max-width:600px){.picker-bar{position:static}}
+    code{font-family:var(--t-font-mono);font-size:.8rem;background:var(--t-accent-tint);color:var(--t-accent-deep);padding:2px 6px}
+    @media(prefers-reduced-motion:reduce){.draw path{stroke-dashoffset:0;animation:none} .ticker .track{animation:none}}
+  </style>
+</head>
+<body>
+
+<div class="ticker" aria-hidden="true"><div class="track"><span><b>★</b> w-b.dev design system</span><span class="dot">/</span><span>Blueprint</span><span class="dot">/</span><span>White paper · One accent · Black ink</span><span class="dot">/</span><span>Hard corners</span><span class="dot">/</span><span>Solid offset shadows</span><span class="dot">/</span><span>Flagship theme: tatame0</span><span class="dot">/</span><span><b>★</b> w-b.dev design system</span><span class="dot">/</span><span>Blueprint</span><span class="dot">/</span><span>White paper · One accent · Black ink</span><span class="dot">/</span><span>Hard corners</span><span class="dot">/</span><span>Solid offset shadows</span><span class="dot">/</span><span>Flagship theme: tatame0</span><span class="dot">/</span></div></div>
+
+<header class="top">
+  <div class="wrap">
+    <h1>w-b.dev<br/><span class="a">Design System.</span></h1>
+    <p>Blueprint · Light · Bold · Wireframe · One accent · v2 (Oct 2026)</p>
+  </div>
+</header>
+
+<!-- ACCENT PICKER -->
+<div class="picker-bar">
+  <div class="wrap">
+    <div class="picker-inner">
+      <label>Theme</label>
+      <div class="presets" role="group" aria-label="Theme presets">
+        <button class="preset" type="button" data-hex="#e5121f" aria-pressed="true"><i style="background:#e5121f"></i>tatame0</button>
+        <button class="preset" type="button" data-hex="#2563eb" aria-pressed="false"><i style="background:#2563eb"></i>alertecole</button>
+        <button class="preset" type="button" data-hex="#0a0a0a" aria-pressed="false"><i style="background:#0a0a0a"></i>neutral</button>
+      </div>
+      <label for="accentPicker">Custom</label>
+      <input type="color" id="accentPicker" value="#e5121f" />
+      <div class="swatches-mini">
+        <div class="sw-mini" data-role="accent" title="--t-accent"></div>
+        <div class="sw-mini" data-role="deep"   title="--t-accent-deep"></div>
+        <div class="sw-mini" data-role="tint"   title="--t-accent-tint"></div>
+      </div>
+      <pre id="pickerCode">--t-accent:      #e5121f;
+--t-accent-deep: #a60a14;
+--t-accent-tint: #fdeaea;
+--t-accent-grid: #f0e4e4;</pre>
+      <span class="copy-hint">click to copy</span>
+    </div>
+  </div>
+</div>
+
+<!-- COLOR -->
+<section>
+  <svg class="cross" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2"/></svg>
+  <div class="wrap">
+    <span class="lbl">01 / Color</span>
+    <h2>White paper. <span style="color:var(--t-accent)">One accent.</span> Black ink.</h2>
+    <p class="sub">White dominates. The accent is the only color — CTAs, line-art, construction marks. Black ink carries text and structure. Use it with conviction but sparingly.</p>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:var(--t-paper);border-bottom:var(--t-border)"></div><div class="meta"><b>Paper</b><span>--t-paper</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--t-ink)"></div><div class="meta"><b>Ink</b><span>--t-ink</span></div></div>
+      <div class="sw" id="sw-accent"><div class="chip" style="background:var(--t-accent)"></div><div class="meta"><b>Accent</b><span id="sw-accent-val">--t-accent</span></div></div>
+      <div class="sw" id="sw-deep"><div class="chip" style="background:var(--t-accent-deep)"></div><div class="meta"><b>Accent Deep</b><span>--t-accent-deep</span></div></div>
+      <div class="sw" id="sw-tint"><div class="chip" style="background:var(--t-accent-tint)"></div><div class="meta"><b>Accent Tint</b><span>--t-accent-tint</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--t-muted)"></div><div class="meta"><b>Muted</b><span>--t-muted</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--t-amber)"></div><div class="meta"><b>Amber</b><span>--t-amber · pending only</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TYPE -->
+<section>
+  <div class="wrap">
+    <span class="lbl">02 / Typography</span>
+    <h2>Industrial display, mono labels, clean body.</h2>
+    <p class="sub"><b>Big Shoulders Display</b> for headlines &amp; buttons (900/800, uppercase, tight leading). <b>Space Mono</b> for labels &amp; annotations. <b>Archivo</b> for prose.</p>
+    <div class="specimen">
+      <span class="tag">Display · Big Shoulders · 900 · hero</span>
+      <div class="disp" style="font-size:var(--t-text-hero)">Build the thing.</div>
+    </div>
+    <div class="specimen">
+      <span class="tag">Display · 900 · h2</span>
+      <div class="disp" style="font-size:var(--t-text-h2)">Section heading <span style="color:var(--t-accent)">in accent.</span></div>
+    </div>
+    <div class="specimen">
+      <span class="tag">Mono · Space Mono · label</span>
+      <div style="font-family:var(--t-font-mono);text-transform:uppercase;letter-spacing:var(--t-tracking-label);color:var(--t-accent);font-size:var(--t-text-label);font-weight:700">FIG.01 — Section label</div>
+    </div>
+    <div class="specimen">
+      <span class="tag">Body · Archivo · lead / body</span>
+      <p style="font-size:var(--t-text-lead);font-weight:500">Lead — the first sentence of a section that needs extra weight.</p>
+      <p style="font-size:var(--t-text-body);color:var(--t-muted);margin-top:8px">Body — the workhorse paragraph style for explanatory copy and lists.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BUTTONS -->
+<section>
+  <div class="wrap">
+    <span class="lbl">03 / Buttons</span>
+    <h2>Solid. Sharp. Offset.</h2>
+    <p class="sub">Hard corners, ink border, solid offset shadow. Hover lifts <code>translate(-2px,-2px)</code>; press sinks <code>translate(3px,3px)</code>. Accent fill = primary, white = ghost.</p>
+    <div class="row">
+      <button class="btn" type="button">Get started <span class="arrow">→</span></button>
+      <button class="btn ghost" type="button">Learn more</button>
+      <button class="btn sm" type="button">Get started <span class="arrow">→</span></button>
+      <button class="btn danger" type="button">Cancel</button>
+    </div>
+  </div>
+</section>
+
+<!-- CARDS & SHADOWS -->
+<section>
+  <div class="wrap">
+    <span class="lbl">04 / Cards &amp; Shadows</span>
+    <h2>Solid offset shadows — never blurred.</h2>
+    <p class="sub"><code>6px 6px 0</code> in accent or ink. Ink cards punctuate sections and pricing blocks.</p>
+    <div class="cards">
+      <div class="card"><h3>Paper card</h3><p>White surface, ink border, accent offset shadow.</p></div>
+      <div class="card" style="box-shadow:var(--t-shadow-ink)"><h3>Ink shadow</h3><p>Same card, ink offset shadow variant.</p></div>
+      <div class="card ink"><h3>Ink card</h3><p>Inverted surface for emphasis and rhythm.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMS -->
+<section>
+  <div class="wrap">
+    <span class="lbl">05 / Forms &amp; Inputs</span>
+    <h2>Crisp fields. Hard corners.</h2>
+    <p class="sub">Labels are Space Mono uppercase. 2.5px ink borders, no radius. Focus switches the border to the accent, with no glow.</p>
+    <div class="form-demo">
+      <div>
+        <label class="field-lbl" for="demo-name">Name</label>
+        <input class="input-ctrl" id="demo-name" type="text" value="Maya Silva" />
+      </div>
+      <div>
+        <label class="field-lbl" for="demo-plan">Plan</label>
+        <select class="input-ctrl" id="demo-plan">
+          <option>Free forever</option>
+          <option>Pro</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOTIFS -->
+<section>
+  <div class="wrap">
+    <span class="lbl">06 / Blueprint Motifs</span>
+    <h2>The wireframe vocabulary.</h2>
+    <p class="sub">Registration crosshairs, dashed accent dividers, dimension lines, background grid, draw-on line-art.</p>
+    <div class="cards">
+      <div class="card">
+        <h3 style="font-size:1.1rem">Dimension line</h3>
+        <div class="dim-line"><span>A</span><div class="bar"></div><span>B</span></div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:1.1rem">Segment bar</h3>
+        <div class="seg" style="margin-top:12px">
+          <div class="fill"></div>
+          <div class="blk"><span class="tick"></span><span class="tick"></span><span class="tick"></span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:1.1rem">Background grid</h3>
+        <div class="grid-demo" style="margin-top:12px"></div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:1.1rem">Draw-on line-art</h3>
+        <svg class="draw" viewBox="0 0 120 80" fill="none" style="margin-top:10px;width:100%;height:80px">
+          <rect x="6" y="6" width="108" height="68" rx="6" stroke="var(--t-accent)" stroke-width="3"/>
+          <path d="M20 30h50M20 46h32" stroke="var(--t-ink)" stroke-width="3"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ICONS -->
+<section>
+  <div class="wrap">
+    <span class="lbl">07 / Iconography</span>
+    <h2>Line-art. 2.5px. Square caps. Accent.</h2>
+    <p class="sub">Geometric, single-weight strokes — matched to the wireframe aesthetic.</p>
+    <div class="row" style="gap:28px;color:var(--t-accent)">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="30" rx="4" stroke="currentColor" stroke-width="2.6"/><path d="M14 18h16M14 26h10" stroke="currentColor" stroke-width="2.4"/><path d="M30 40l5 5 11-12" stroke="currentColor" stroke-width="3.2" stroke-linecap="square"/></svg>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="4" y="20" width="40" height="12" rx="3" stroke="currentColor" stroke-width="2.6"/><rect x="32" y="20" width="12" height="12" fill="currentColor"/></svg>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="7" y="11" width="34" height="30" rx="4" stroke="currentColor" stroke-width="2.6"/><path d="M7 19h34M16 6v10M32 6v10" stroke="currentColor" stroke-width="2.6"/></svg>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="18" cy="16" r="7" stroke="currentColor" stroke-width="2.6"/><path d="M5 42c1-8 6-12 13-12s12 4 13 12" stroke="currentColor" stroke-width="2.6"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- THEME: TATAME0 -->
+<section>
+  <svg class="cross" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2"/></svg>
+  <div class="wrap">
+    <span class="lbl">08 / Flagship theme</span>
+    <h2>tatame0. Where Blueprint came from.</h2>
+    <p class="sub">Blueprint was extracted from the tatame0 site, inspired by gym mats and engineering drawings. Its theme file sets Tatame Red and adds a domain palette, the IBJJF youth and adult belts. A project theme can add its own palette the same way, without touching the core tokens.</p>
+    <div class="brand-demo">
+      <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <rect x="5" y="5" width="54" height="54" rx="15" fill="#e5121f"/>
+        <path d="M23 5V59M41 5V59M5 23H59M5 41H59" stroke="#fff" stroke-width="2.2"/>
+        <rect x="23" y="23" width="18" height="18" rx="4.5" fill="#0a0a0a"/>
+        <rect x="28.5" y="28.5" width="7" height="7" rx="2" fill="#e5121f"/>
+      </svg>
+      <span>tatame<span class="zero">0</span></span>
+    </div>
+    <div class="belts-grid">
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-white)"><div class="sleeve"></div></div><span>White</span><code>#E8E8E8</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-grey-white)"><div class="sleeve"></div></div><span>Grey/White</span><code>#D0D0D0</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-grey)"><div class="sleeve"></div></div><span>Grey</span><code>#9AA0A6</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-grey-black)"><div class="sleeve"></div></div><span>Grey/Black</span><code>#6B6B6B</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-yellow-white)"><div class="sleeve"></div></div><span>Yellow/White</span><code>#F9E07A</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-yellow)"><div class="sleeve"></div></div><span>Yellow</span><code>#F4C430</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-yellow-black)"><div class="sleeve"></div></div><span>Yellow/Black</span><code>#C49B20</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-orange-white)"><div class="sleeve"></div></div><span>Orange/White</span><code>#F9C07A</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-orange)"><div class="sleeve"></div></div><span>Orange</span><code>#F08C00</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-orange-black)"><div class="sleeve"></div></div><span>Orange/Black</span><code>#C06C00</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-green-white)"><div class="sleeve"></div></div><span>Green/White</span><code>#8FD48F</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-green)"><div class="sleeve"></div></div><span>Green</span><code>#2E9E44</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-green-black)"><div class="sleeve"></div></div><span>Green/Black</span><code>#207030</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-blue)"><div class="sleeve"></div></div><span>Blue</span><code>#1F6FEB</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-purple)"><div class="sleeve"></div></div><span>Purple</span><code>#8957E5</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-brown)"><div class="sleeve"></div></div><span>Brown</span><code>#8B5A2B</code></div>
+      <div class="belt-card"><div class="belt-preview" style="background:var(--t-belt-black)"><div class="sleeve" style="background:#E8E8E8"></div></div><span>Black</span><code>#111317</code></div>
+    </div>
+  </div>
+</section>
+
+<!-- USAGE -->
+<section style="border-bottom:none">
+  <div class="wrap">
+    <span class="lbl">09 / Use it</span>
+    <h2>Three links and you're on-system.</h2>
+    <p class="sub">Load the fonts, the core tokens and one theme. To use your own accent, override the four <code>--t-accent-*</code> variables. The picker at the top gives you the values to copy. Everything else follows.</p>
+<pre class="snippet">&lt;link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Space+Mono:wght@400;700&amp;family=Archivo:wght@400;500;600;700;800;900&amp;display=swap"&gt;
+&lt;link rel="stylesheet" href="https://design.w-b.dev/tokens.css"&gt;
+&lt;link rel="stylesheet" href="https://design.w-b.dev/themes/tatame0.css"&gt;</pre>
+    <div class="files">
+      <a href="./tokens.css"><div class="card"><h3>tokens.css</h3><p>Core <code>--t-*</code> custom properties.</p></div></a>
+      <a href="./themes/tatame0.css"><div class="card"><h3>themes/</h3><p>tatame0, alertecole and neutral.</p></div></a>
+      <a href="./tailwind.css"><div class="card"><h3>tailwind.css</h3><p>Tailwind v4 <code>@theme</code> map.</p></div></a>
+      <a href="./starter/"><div class="card"><h3>starter/</h3><p>A page template with every component.</p></div></a>
+      <a href="./theme.json"><div class="card"><h3>theme.json</h3><p>Machine-readable tokens for tooling and iOS.</p></div></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>w-b.dev design system · Blueprint v2</span>
+    <a href="./legacy/dark-v1/reference/">v1 (dark, archived)</a>
+    <a href="https://github.com/w3b3/design-system-w-b" target="_blank" rel="noopener">Source</a>
+    <a href="https://linkedin.com/in/brasileiro" target="_blank" rel="noopener">Daniel Brasileiro</a>
+  </div>
+</footer>
+
+<script>
+  function hexToHsl(hex) {
+    const r = parseInt(hex.slice(1,3),16)/255;
+    const g = parseInt(hex.slice(3,5),16)/255;
+    const b = parseInt(hex.slice(5,7),16)/255;
+    const max = Math.max(r,g,b), min = Math.min(r,g,b);
+    let h, s, l = (max+min)/2;
+    if (max === min) { h = s = 0; }
+    else {
+      const d = max - min;
+      s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+      switch(max) {
+        case r: h = (g-b)/d + (g<b ? 6 : 0); break;
+        case g: h = (b-r)/d + 2; break;
+        case b: h = (r-g)/d + 4; break;
+      }
+      h /= 6;
+    }
+    return [h*360, s*100, l*100];
+  }
+
+  function hslToHex(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
+    let r, g, b;
+    if (s === 0) { r = g = b = l; }
+    else {
+      const q = l < 0.5 ? l*(1+s) : l+s-l*s;
+      const p = 2*l - q;
+      const hue = (p, q, t) => {
+        if (t < 0) t += 1; if (t > 1) t -= 1;
+        if (t < 1/6) return p+(q-p)*6*t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p+(q-p)*(2/3-t)*6;
+        return p;
+      };
+      r = hue(p,q,h+1/3); g = hue(p,q,h); b = hue(p,q,h-1/3);
+    }
+    return '#' + [r,g,b].map(x => Math.round(x*255).toString(16).padStart(2,'0')).join('');
+  }
+
+  function derive(hex) {
+    const [h, s, l] = hexToHsl(hex);
+    return {
+      accent: hex,
+      deep:   hslToHex(h, s,                    Math.max(l - 18, 4)),
+      tint:   hslToHex(h, Math.min(s*.25, 25),  Math.min(l + 46, 97)),
+      grid:   hslToHex(h, Math.min(s*.15, 18),  Math.min(l + 50, 98)),
+    };
+  }
+
+  function applyAccent(hex) {
+    const d = derive(hex);
+    const root = document.documentElement;
+    root.style.setProperty('--t-accent',       d.accent);
+    root.style.setProperty('--t-accent-deep',  d.deep);
+    root.style.setProperty('--t-accent-tint',  d.tint);
+    root.style.setProperty('--t-accent-grid',  d.grid);
+    // keep legacy aliases in sync
+    root.style.setProperty('--t-red',       d.accent);
+    root.style.setProperty('--t-red-deep',  d.deep);
+    root.style.setProperty('--t-red-tint',  d.tint);
+    root.style.setProperty('--t-grid',      d.grid);
+
+    document.querySelector('.sw-mini[data-role="accent"]').style.background = d.accent;
+    document.querySelector('.sw-mini[data-role="deep"]').style.background   = d.deep;
+    document.querySelector('.sw-mini[data-role="tint"]').style.background   = d.tint;
+
+    document.getElementById('pickerCode').textContent =
+`--t-accent:      ${d.accent};
+--t-accent-deep: ${d.deep};
+--t-accent-tint: ${d.tint};
+--t-accent-grid: ${d.grid};`;
+  }
+
+  const presets = document.querySelectorAll('.preset');
+  function markPreset(hex) {
+    presets.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.hex === hex.toLowerCase())));
+  }
+  presets.forEach(b => b.addEventListener('click', () => {
+    applyAccent(b.dataset.hex);
+    document.getElementById('accentPicker').value = b.dataset.hex;
+    markPreset(b.dataset.hex);
+  }));
+  document.getElementById('accentPicker').addEventListener('input', e => { applyAccent(e.target.value); markPreset(e.target.value); });
+
+  document.getElementById('pickerCode').addEventListener('click', function() {
+    const hint = document.querySelector('.copy-hint');
+    const el = this;
+    (navigator.clipboard ? navigator.clipboard.writeText(el.textContent) : Promise.reject())
+      .then(() => { hint.textContent = 'copied!'; })
+      .catch(() => {
+        const r = document.createRange(); r.selectNodeContents(el);
+        const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        hint.textContent = 'press ⌘C';
+      });
+    setTimeout(() => hint.textContent = 'click to copy', 1500);
+  });
+</script>
+</body>
+</html>

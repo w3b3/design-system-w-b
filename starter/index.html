@@ -1,304 +1,199 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page Title</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light only" />
+  <title>Page Title</title>
+  <!-- Blueprint starter (w-b.dev design system v2).
+       Copy this file, then:
+       1. Keep tokens.css and pick ONE theme (or override the four --t-accent-* vars).
+       2. Replace the copy. Delete the components you don't need.
+       If you host the page elsewhere, point the two links at https://design.w-b.dev/... -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Mono:wght@400;700&family=Archivo:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../themes/tatame0.css" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--t-paper);color:var(--t-ink);font-family:var(--t-font-body);line-height:var(--t-leading-body);
+      background-image:var(--t-bg-grid);background-size:var(--t-grid-size) var(--t-grid-size)}
+    .wrap{max-width:var(--t-maxw);margin:0 auto;padding:0 var(--t-gutter)}
+    h1,h2,h3{font-family:var(--t-font-display);font-weight:var(--t-weight-black);line-height:var(--t-leading-display);
+      letter-spacing:var(--t-tracking-display);text-transform:uppercase;text-wrap:balance}
+    a{color:inherit}
+    :focus-visible{outline:var(--t-line) solid var(--t-accent);outline-offset:3px}
 
-/* ═══ DESIGN TOKENS ═══════════════════════════════════════════════════════════
-   Source: https://design.w-b.dev
-   Repo:   https://github.com/w3b3/design-system-w-b
-   ═══════════════════════════════════════════════════════════════════════════ */
-:root{
-  /* Backgrounds */
-  --bg:#0e0e0e;
-  --bg2:#141414;
+    /* ticker */
+    .ticker{background:var(--t-ink);color:#fff;font-family:var(--t-font-mono);font-size:.74rem;letter-spacing:.1em;
+      text-transform:uppercase;overflow:hidden;border-bottom:var(--t-line) solid var(--t-accent)}
+    .ticker .track{display:flex;gap:3rem;white-space:nowrap;padding:9px 0;width:max-content;animation:marquee var(--t-marquee) linear infinite}
+    .ticker b,.ticker .dot{color:var(--t-accent)}
+    @keyframes marquee{to{transform:translateX(-50%)}}
 
-  /* Foreground — warm paper, never pure white */
-  --fg:#f3f1ec;
+    /* nav */
+    .nav{background:var(--t-paper);border-bottom:var(--t-border)}
+    .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+    .logo{font-family:var(--t-font-wordmark);font-weight:900;font-size:1.5rem;letter-spacing:-.055em;text-transform:lowercase;text-decoration:none}
+    .logo span{color:var(--t-accent)}
+    .nav ul{display:flex;gap:22px;list-style:none;font-family:var(--t-font-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase}
+    .nav ul a{text-decoration:none}
+    .nav ul a:hover{color:var(--t-accent)}
+    @media(max-width:640px){.nav ul{display:none}}
 
-  /* Opacity ladder — hierarchy through opacity, not hue */
-  /* Note: keep body text >= 4.5:1 contrast on --bg */
-  --dim:rgba(243,241,236,0.5);        /* body text, labels */
-  --dimmer:rgba(243,241,236,0.32);    /* meta, timestamps, borders */
-  --hair:rgba(243,241,236,0.14);      /* subtle dividers, card edges */
+    /* kicker + section */
+    .lbl{font-family:var(--t-font-mono);font-size:var(--t-text-label);font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+      color:var(--t-accent);display:inline-flex;align-items:center;gap:.6em;margin-bottom:14px}
+    .lbl::before{content:"";width:26px;border-top:var(--t-line) solid var(--t-accent)}
+    section{padding:var(--t-section-y) 0;border-bottom:var(--t-divider);position:relative}
+    section h2{font-size:var(--t-text-h2);margin-bottom:10px}
+    .sub{color:var(--t-muted);max-width:60ch;margin-bottom:34px;font-size:var(--t-text-lead)}
+    .cross{position:absolute;top:18px;right:18px;width:14px;height:14px;color:var(--t-accent)}
 
-  /* Accent — the only non-grayscale color */
-  --accent:#d4a853;
-  --accent-dim:rgba(212,168,83,0.3);
+    /* hero */
+    .hero{padding:88px 0 80px}
+    .hero h1{font-size:var(--t-text-hero);max-width:14ch}
+    .hero h1 em{font-style:normal;color:var(--t-accent)}
+    .hero p{font-size:var(--t-text-lead);font-weight:500;max-width:52ch;margin:22px 0 34px}
+    .fig{display:inline-block;font-family:var(--t-font-mono);font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--t-accent);border:var(--t-line) solid var(--t-accent);background:#fff;padding:4px 8px;margin-bottom:20px}
 
-  /* Typography — two faces, no exceptions */
-  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
-  --helv:Helvetica,"Helvetica Neue",Arial,sans-serif;
-}
+    /* buttons */
+    .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+    .btn{font-family:var(--t-font-display);font-weight:var(--t-weight-display);text-transform:uppercase;letter-spacing:.02em;font-size:1.05rem;
+      display:inline-flex;align-items:center;gap:.6em;background:var(--t-accent);color:#fff;padding:16px 26px;border:var(--t-border);
+      box-shadow:var(--t-shadow-ink);text-decoration:none;cursor:pointer;
+      transition:transform var(--t-dur-fast) ease,box-shadow var(--t-dur-fast) ease}
+    .btn:hover{transform:translate(-2px,-2px);box-shadow:var(--t-shadow-hover)}
+    .btn:active{transform:translate(3px,3px);box-shadow:var(--t-shadow-active)}
+    .btn.ghost{background:#fff;color:var(--t-ink);box-shadow:var(--t-shadow)}
+    .btn.ghost:hover{box-shadow:var(--t-shadow-hover-red)}
+    .btn .arrow{transition:transform .15s ease}
+    .btn:hover .arrow{transform:translateX(4px)}
 
-/* Light theme */
-:root[data-theme="light"]{
-  --bg:#f6f2ea;
-  --bg2:#ffffff;
-  --fg:#171614;
-  --dim:rgba(23,22,20,0.78);
-  --dimmer:rgba(23,22,20,0.55);
-  --hair:rgba(23,22,20,0.18);
-}
-@media (prefers-color-scheme: light){
-  :root:not([data-theme]){
-    --bg:#f6f2ea;
-    --bg2:#ffffff;
-    --fg:#171614;
-    --dim:rgba(23,22,20,0.78);
-    --dimmer:rgba(23,22,20,0.55);
-    --hair:rgba(23,22,20,0.18);
-  }
-}
-@media (prefers-contrast: more) and (prefers-color-scheme: light){
-  :root:not([data-theme]),
-  :root[data-theme="light"]{
-    --dim:rgba(23,22,20,0.9);
-    --dimmer:rgba(23,22,20,0.72);
-    --hair:rgba(23,22,20,0.28);
-  }
-}
+    /* cards */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+    .card{background:#fff;border:var(--t-border);padding:26px;box-shadow:var(--t-shadow);min-width:0}
+    .card h3{font-size:var(--t-text-h3);margin-bottom:8px}
+    .card p{color:var(--t-muted)}
+    .card.ink{background:var(--t-ink);color:#fff}
+    .card.ink p{color:var(--t-on-ink-dim)}
+    .step .n{font-family:var(--t-font-display);font-weight:900;font-size:4.2rem;line-height:.8;color:var(--t-accent)}
+    .step .badge{display:inline-block;font-family:var(--t-font-mono);font-size:.68rem;font-weight:700;letter-spacing:.14em;
+      text-transform:uppercase;border:var(--t-line) solid var(--t-ink);padding:2px 7px;margin:14px 0 10px}
 
-/* ═══ BASE ═════════════════════════════════════════════════════════════════ */
-html{scroll-behavior:smooth;background:var(--bg);color:var(--fg);font-family:var(--helv);font-size:16px}
-body{background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    /* dimension line */
+    .dim{display:flex;align-items:center;font-family:var(--t-font-mono);font-size:.72rem;color:var(--t-accent);margin-top:26px;gap:10px}
+    .dim .bar{flex:1;border-top:var(--t-line) dashed var(--t-accent)}
 
-/* Theme toggle */
-.theme-toggle{
-  position:fixed;top:18px;right:18px;z-index:50;
-  display:inline-flex;align-items:center;gap:10px;
-  padding:10px 12px;border-radius:999px;
-  border:1px solid var(--hair);background:color-mix(in srgb, var(--bg2) 92%, transparent);
-  color:var(--dim);font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
-  cursor:pointer;user-select:none;transition:color 0.2s,border-color 0.2s,background 0.2s,transform 0.2s;
-}
-.theme-toggle:hover{color:var(--fg);border-color:var(--dimmer);transform:translateY(-1px)}
-.theme-toggle .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
-.theme-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    /* form */
+    .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;border:var(--t-border);padding:26px;background:#fff;box-shadow:var(--t-shadow-ink)}
+    .field-lbl{display:block;font-family:var(--t-font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t-muted);margin-bottom:6px}
+    .input{width:100%;padding:10px 14px;background:#fff;border:var(--t-border);border-radius:0;font:inherit;color:var(--t-ink);outline:none}
+    .input:focus{border-color:var(--t-accent)}
+    .form .btn{align-self:end;justify-content:center}
 
-/* ═══ SECTIONS ═════════════════════════════════════════════════════════════ */
-.section{
-  min-height:100vh;
-  padding:120px 60px;
-  opacity:0;transform:translateY(30px);
-  transition:opacity 0.7s ease,transform 0.7s ease;
-}
-.section.visible{opacity:1;transform:translateY(0)}
-.section-narrow{max-width:900px;margin:0 auto}
-.section-wide{max-width:1400px;margin:0 auto}
+    /* footer */
+    footer{background:var(--t-ink);color:var(--t-on-ink-dim);border-top:var(--t-line) solid var(--t-accent);padding:44px 0;
+      font-family:var(--t-font-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+    footer .wrap{display:flex;gap:18px 30px;flex-wrap:wrap;justify-content:space-between}
+    footer a{color:#fff;text-decoration:none;border-bottom:1.5px solid var(--t-accent);padding-bottom:2px}
 
-/* ═══ TYPOGRAPHY ═══════════════════════════════════════════════════════════ */
-h1{font-weight:700;font-size:clamp(42px,6vw,72px);letter-spacing:-0.04em;line-height:1.0}
-h2{font-weight:700;font-size:clamp(24px,3.5vw,40px);letter-spacing:-0.03em;line-height:1.1;margin-bottom:32px}
-h3{font-weight:700;font-size:clamp(18px,2.5vw,28px);letter-spacing:-0.02em;line-height:1.2;margin-bottom:16px}
-.label{font-family:var(--mono);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
-.body{font-family:var(--helv);font-size:clamp(16px,1.6vw,19px);line-height:1.65;color:var(--dim);max-width:680px}
-.body strong{color:var(--fg);font-weight:600}
-.mono{font-family:var(--mono);font-size:14px;letter-spacing:0.01em;color:var(--dim);line-height:1.6}
-.accent{color:var(--accent)}
-
-/* ═══ UTILITIES ════════════════════════════════════════════════════════════ */
-.divider{width:40px;height:1px;background:var(--dimmer);margin:0 0 32px}
-
-/* ═══ FLOW CHAIN ═══════════════════════════════════════════════════════════ */
-.flow-chain{display:flex;flex-direction:column;gap:0;margin:50px 0}
-.flow-step{display:flex;align-items:center;gap:16px;padding:14px 20px;border-left:2px solid var(--hair);
-  opacity:0;transform:translateX(-20px);transition:all 0.5s ease}
-.visible .flow-step{opacity:1;transform:translateX(0)}
-.flow-step:nth-child(1){transition-delay:0.1s}
-.flow-step:nth-child(2){transition-delay:0.2s}
-.flow-step:nth-child(3){transition-delay:0.3s}
-.flow-step:nth-child(4){transition-delay:0.4s}
-.flow-step:nth-child(5){transition-delay:0.5s}
-.flow-step:nth-child(6){transition-delay:0.6s}
-.flow-step:nth-child(7){transition-delay:0.7s}
-.flow-step .step-icon{width:32px;height:32px;border-radius:50%;background:var(--bg2);border:1px solid var(--dimmer);
-  display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--dim);flex-shrink:0}
-.flow-step .step-label{font-family:var(--mono);font-size:13px;color:var(--dim)}
-.flow-step .step-time{font-family:var(--mono);font-size:12px;color:var(--dimmer);margin-left:auto;flex-shrink:0}
-.flow-step.highlight{border-left-color:var(--accent)}
-.flow-step.highlight .step-icon{border-color:var(--accent);color:var(--accent)}
-.flow-step.highlight .step-label{color:var(--accent)}
-
-/* ═══ CARDS ════════════════════════════════════════════════════════════════ */
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;margin:50px 0}
-.card{padding:24px;border:1px solid var(--hair);background:var(--bg2);
-  opacity:0;transform:translateY(20px);transition:all 0.6s ease}
-.visible .card{opacity:1;transform:translateY(0)}
-.visible .card:nth-child(1){transition-delay:0.1s}
-.visible .card:nth-child(2){transition-delay:0.2s}
-.visible .card:nth-child(3){transition-delay:0.3s}
-.visible .card:nth-child(4){transition-delay:0.4s}
-.visible .card:nth-child(5){transition-delay:0.5s}
-.visible .card:nth-child(6){transition-delay:0.6s}
-.card h4{font-family:var(--helv);font-weight:700;font-size:15px;letter-spacing:-0.01em;margin-bottom:10px}
-.card p{font-family:var(--mono);font-size:13px;color:var(--dim);line-height:1.55}
-.card.accent-card{border-color:var(--accent-dim)}
-.card.accent-card h4{color:var(--accent)}
-
-/* ═══ TOPOLOGY BOX ═════════════════════════════════════════════════════════ */
-.topo-box{border:1px solid var(--hair);padding:24px;position:relative;margin:20px 0}
-.topo-box .topo-title{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
-  color:var(--dimmer);position:absolute;top:-8px;left:16px;background:var(--bg);padding:0 8px}
-.topo-items{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
-.topo-item{font-family:var(--mono);font-size:12px;padding:5px 12px;border:1px solid var(--dimmer);color:var(--dim)}
-.topo-item.hot{border-color:var(--accent-dim);color:var(--accent)}
-
-/* ═══ STACKED LAYERS ═══════════════════════════════════════════════════════ */
-.layers{display:flex;flex-direction:column;gap:0;max-width:700px;margin:50px 0}
-.layer{padding:20px 24px;border:1px solid var(--hair);border-bottom:none;
-  opacity:0;transform:translateY(20px);transition:all 0.5s ease}
-.layer:last-child{border-bottom:1px solid var(--hair)}
-.visible .layer{opacity:1;transform:translateY(0)}
-.visible .layer:nth-child(1){transition-delay:0.15s}
-.visible .layer:nth-child(2){transition-delay:0.35s}
-.visible .layer:nth-child(3){transition-delay:0.55s}
-.layer-name{font-family:var(--helv);font-weight:700;font-size:14px;margin-bottom:4px}
-.layer-desc{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.45}
-.layer.hot{border-color:var(--accent-dim)}
-.layer.hot .layer-name{color:var(--accent)}
-
-/* ═══ MATURITY / PROGRESS ══════════════════════════════════════════════════ */
-.maturity{margin:50px 0}
-.mat-level{display:flex;align-items:stretch;border-bottom:1px solid var(--hair);
-  opacity:0;transform:translateX(-20px);transition:all 0.5s ease}
-.visible .mat-level{opacity:1;transform:translateX(0)}
-.visible .mat-level:nth-child(1){transition-delay:0.1s}
-.visible .mat-level:nth-child(2){transition-delay:0.25s}
-.visible .mat-level:nth-child(3){transition-delay:0.4s}
-.visible .mat-level:nth-child(4){transition-delay:0.55s}
-.visible .mat-level:nth-child(5){transition-delay:0.7s}
-.mat-num{width:50px;padding:16px 0;text-align:center;font-family:var(--helv);font-weight:700;font-size:24px;color:var(--dimmer);flex-shrink:0}
-.mat-content{padding:16px;flex:1}
-.mat-content h4{font-family:var(--helv);font-weight:700;font-size:14px;margin-bottom:4px}
-.mat-content p{font-family:var(--mono);font-size:12px;color:var(--dim);line-height:1.5}
-.mat-level.current .mat-num{color:var(--accent)}
-.mat-level.current{border-left:3px solid var(--accent)}
-
-/* ═══ PIPELINE NODES ═══════════════════════════════════════════════════════ */
-.node-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:30px 0}
-.node{width:64px;height:64px;border-radius:50%;border:2px solid var(--fg);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--mono);font-size:10px;letter-spacing:0.05em;text-transform:uppercase}
-.node.filled{background:var(--fg);color:var(--bg)}
-.node.accent{border-color:var(--accent);color:var(--accent)}
-.node-arrow{font-family:var(--mono);color:var(--dimmer);font-size:16px}
-
-/* ═══ SPLIT PANELS ═════════════════════════════════════════════════════════ */
-.split{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin:60px 0}
-.split-panel{padding:30px;border:1px solid var(--hair);position:relative}
-.split-panel.old{opacity:0.4}
-.split-panel.new{border-color:var(--accent-dim)}
-.split-panel .panel-label{font-family:var(--mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim);margin-bottom:20px}
-.split-panel.new .panel-label{color:var(--accent)}
-
-/* ═══ TIMELINE / ROADMAP ═══════════════════════════════════════════════════ */
-.roadmap{margin:50px 0}
-.phase{padding:24px 0 24px 36px;border-left:2px solid var(--hair);position:relative;
-  opacity:0;transform:translateX(-20px);transition:all 0.5s ease}
-.visible .phase{opacity:1;transform:translateX(0)}
-.visible .phase:nth-child(1){transition-delay:0.1s}
-.visible .phase:nth-child(2){transition-delay:0.25s}
-.visible .phase:nth-child(3){transition-delay:0.4s}
-.visible .phase:nth-child(4){transition-delay:0.55s}
-.visible .phase:nth-child(5){transition-delay:0.7s}
-.phase::before{content:'';position:absolute;left:-6px;top:28px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--dimmer)}
-.phase h4{font-family:var(--helv);font-weight:700;font-size:16px;margin-bottom:6px}
-.phase ul{list-style:none;padding:0}
-.phase li{font-family:var(--mono);font-size:12px;color:var(--dim);padding:3px 0;line-height:1.4}
-.phase li::before{content:'';display:inline-block;width:6px;height:1px;background:var(--dim);margin-right:10px;vertical-align:middle}
-
-/* ═══ ANIMATIONS ═══════════════════════════════════════════════════════════ */
-@keyframes breathe{0%,100%{opacity:0.3}50%{opacity:1}}
-@keyframes nodeIn{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
-.breathe{animation:breathe 2s ease infinite}
-
-/* ═══ RESPONSIVE ═══════════════════════════════════════════════════════════ */
-@media(max-width:768px){
-  .section{padding:80px 24px}
-  .split{grid-template-columns:1fr;gap:30px}
-  .card-grid{grid-template-columns:1fr}
-}
-</style>
+    /* motion: content is visible by default; JS only adds the rise when it runs */
+    .js .rise{opacity:0;transform:translateY(24px);transition:opacity var(--t-dur-rise) var(--t-ease-rise),transform var(--t-dur-rise) var(--t-ease-rise)}
+    .js .rise.in{opacity:1;transform:none}
+    @media(prefers-reduced-motion:reduce){.ticker .track{animation:none} .js .rise{opacity:1;transform:none}}
+  </style>
 </head>
 <body>
-  <button class="theme-toggle" type="button" id="themeToggle" aria-label="Toggle theme">
-    <span class="dot" aria-hidden="true"></span>
-    <span id="themeToggleLabel">Theme</span>
-  </button>
 
-<!-- ═══ HERO ═══════════════════════════════════════════════════════════════ -->
-<section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;opacity:1;transform:none">
-  <div class="label">Topic // Date</div>
-  <h1 style="margin:16px 0">Page Title</h1>
-  <p class="mono" style="margin-top:8px">subtitle goes here</p>
+<div class="ticker" aria-hidden="true"><div class="track">
+  <span><b>★</b> Announcement goes here</span><span class="dot">/</span><span>Second line</span><span class="dot">/</span><span>Third line</span><span class="dot">/</span>
+  <span><b>★</b> Announcement goes here</span><span class="dot">/</span><span>Second line</span><span class="dot">/</span><span>Third line</span><span class="dot">/</span>
+</div></div>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="#">product<span>0</span></a>
+    <ul>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="fig">FIG.01 — One-line positioning</span>
+    <h1>Say the one thing <em>this page is for.</em></h1>
+    <p>A lead sentence in Archivo 500. It explains who this is for and what changes for them, in plain words.</p>
+    <div class="row">
+      <a class="btn" href="#contact">Primary action <span class="arrow">→</span></a>
+      <a class="btn ghost" href="#how">Secondary</a>
+    </div>
+  </div>
+</header>
+
+<section id="how">
+  <svg class="cross" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2"/></svg>
+  <div class="wrap">
+    <span class="lbl">How it works</span>
+    <h2>Three steps. No surprises.</h2>
+    <p class="sub">Use step cards only when the order is real.</p>
+    <div class="cards">
+      <div class="card step rise"><div class="n">1</div><span class="badge">Step 01</span><h3>First thing</h3><p>What happens and why it matters.</p></div>
+      <div class="card step rise"><div class="n">2</div><span class="badge">Step 02</span><h3>Second thing</h3><p>What happens and why it matters.</p></div>
+      <div class="card step rise"><div class="n">3</div><span class="badge">Step 03</span><h3>Third thing</h3><p>What happens and why it matters.</p></div>
+    </div>
+    <div class="dim" aria-hidden="true"><span>START</span><div class="bar"></div><span>3 STEPS = DONE</span></div>
+  </div>
 </section>
 
-<!-- ═══ SECTION TEMPLATE ══════════════════════════════════════════════════ -->
-<section class="section">
-  <div class="section-narrow">
-    <div class="label">01 // Section Name</div>
-    <div class="divider"></div>
-    <h2>Section Heading</h2>
-    <p class="body">Body text with <strong>bold emphasis</strong> that promotes to full foreground color. Keep these paragraphs under 680px wide for comfortable reading.</p>
-
-    <!-- Replace with your component of choice -->
-    <div class="flow-chain" style="margin-top:40px">
-      <div class="flow-step"><div class="step-icon">1</div><div class="step-label">First step in the sequence</div></div>
-      <div class="flow-step"><div class="step-icon">2</div><div class="step-label">Second step</div></div>
-      <div class="flow-step highlight"><div class="step-icon">!</div><div class="step-label">Key moment — highlighted</div></div>
+<section id="features">
+  <div class="wrap">
+    <span class="lbl">Features</span>
+    <h2>What you get.</h2>
+    <p class="sub">Paper cards carry the accent shadow. Use one ink card for emphasis.</p>
+    <div class="cards">
+      <div class="card rise"><h3>Feature one</h3><p>A concrete benefit in one or two sentences.</p></div>
+      <div class="card rise" style="box-shadow:var(--t-shadow-ink)"><h3>Feature two</h3><p>A concrete benefit in one or two sentences.</p></div>
+      <div class="card ink rise"><h3>The big one</h3><p>The feature that deserves the inverted surface.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ═══ OUTRO ═════════════════════════════════════════════════════════════ -->
-<section class="section" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:60vh">
-  <h2>Closing Statement</h2>
-  <p class="mono" style="margin-top:30px;max-width:500px;text-align:center;line-height:1.6">A summary sentence that captures the core idea.</p>
-  <a href="https://linkedin.com/in/brasileiro" target="_blank" rel="noopener"
-     style="display:inline-block;margin-top:50px;font-family:var(--mono);font-size:12px;letter-spacing:0.12em;color:var(--dim);text-decoration:none;border-bottom:1px solid var(--dimmer);padding-bottom:2px;transition:color 0.2s,border-color 0.2s"
-     onmouseover="this.style.color='var(--fg)';this.style.borderColor='var(--fg)'"
-     onmouseout="this.style.color='var(--dim)';this.style.borderColor='var(--dimmer)'">Daniel Brasileiro</a>
+<section id="contact" style="border-bottom:none">
+  <div class="wrap">
+    <span class="lbl">Contact</span>
+    <h2>Get in touch.</h2>
+    <p class="sub">Forms keep hard corners and mono labels. Handle submit in script.</p>
+    <form class="form" id="contact-form">
+      <div><label class="field-lbl" for="f-name">Name</label><input class="input" id="f-name" name="name" required /></div>
+      <div><label class="field-lbl" for="f-email">Email</label><input class="input" id="f-email" name="email" type="email" required /></div>
+      <button class="btn" type="submit">Send <span class="arrow">→</span></button>
+    </form>
+  </div>
 </section>
 
-<!-- ═══ SCROLL OBSERVER ═══════════════════════════════════════════════════ -->
-<script>
-const THEME_KEY = 'w-b:theme';
-function applyTheme(next){
-  if (!next || next === 'system') document.documentElement.removeAttribute('data-theme');
-  else document.documentElement.setAttribute('data-theme', next);
-  try{ localStorage.setItem(THEME_KEY, next || 'system'); }catch{}
-  const label = document.getElementById('themeToggleLabel');
-  if (label){
-    const current = document.documentElement.getAttribute('data-theme') || 'system';
-    label.textContent = current === 'light' ? 'Light' : (current === 'dark' ? 'Dark' : 'System');
-  }
-}
-function cycleTheme(){
-  const current = document.documentElement.getAttribute('data-theme') || 'system';
-  const next = current === 'system' ? 'light' : (current === 'light' ? 'dark' : 'system');
-  applyTheme(next);
-}
-try{
-  const saved = localStorage.getItem(THEME_KEY);
-  if (saved && saved !== 'system') document.documentElement.setAttribute('data-theme', saved);
-}catch{}
-applyTheme(document.documentElement.getAttribute('data-theme') || 'system');
-const themeToggle = document.getElementById('themeToggle');
-if (themeToggle) themeToggle.addEventListener('click', cycleTheme);
+<footer>
+  <div class="wrap">
+    <span>© 2026 Product name</span>
+    <a href="https://linkedin.com/in/brasileiro" target="_blank" rel="noopener">Daniel Brasileiro</a>
+  </div>
+</footer>
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add('visible');
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
-document.querySelectorAll('.section').forEach(s => observer.observe(s));
+<script>
+  // Rise-in on scroll. Content stays visible if JS or IntersectionObserver is missing.
+  if ('IntersectionObserver' in window) {
+    document.documentElement.classList.add('js');
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }), { threshold: .15 });
+    document.querySelectorAll('.rise').forEach((el, i) => { el.style.transitionDelay = (i % 3) * .1 + 's'; io.observe(el); });
+  }
+  document.getElementById('contact-form').addEventListener('submit', e => { e.preventDefault(); });
 </script>
 </body>
 </html>

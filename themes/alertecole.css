@@ -1,0 +1,7 @@
+/* Blueprint theme: alertecole — slate blue */
+:root {
+  --t-accent:       #2563eb;
+  --t-accent-deep:  #1d4ed8;
+  --t-accent-tint:  #eff6ff;
+  --t-accent-grid:  #e8f0fe;
+}

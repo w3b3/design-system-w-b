@@ -1,0 +1,55 @@
+/* ============================================================================
+   w-b.dev design system (Blueprint) → Tailwind v4 theme map.
+   Usage in a Tailwind v4 app:
+
+       @import "tailwindcss";
+       @import "<path-to>/design-system-w-b/tailwind.css";
+
+   Then override the accent in your own @theme block:
+
+       @theme {
+         --color-accent:      #2563eb;
+         --color-accent-deep: #1d4ed8;
+         --color-accent-tint: #eff6ff;
+       }
+
+   Utilities: bg-paper  text-ink  bg-accent  font-display  shadow-offset  border-ink
+   ========================================================================== */
+
+@theme {
+  --color-paper:        #ffffff;
+  --color-ink:          #0a0a0a;
+  --color-accent:       #e5121f;
+  --color-accent-deep:  #a60a14;
+  --color-accent-tint:  #fdeaea;
+  --color-accent-grid:  #f0e4e4;
+  --color-muted:        #6b6b6b;
+
+  /* Legacy aliases — keeps tatame0 utilities working unchanged */
+  --color-red:          var(--color-accent);
+  --color-red-deep:     var(--color-accent-deep);
+  --color-red-tint:     var(--color-accent-tint);
+  --color-grid:         var(--color-accent-grid);
+
+  --font-display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  --font-mono:    'Space Mono', ui-monospace, monospace;
+  --font-body:    'Archivo', system-ui, sans-serif;
+
+  --text-hero:  clamp(2.9rem, 7.6vw, 6rem);
+  --text-h2:    clamp(2.1rem, 5.5vw, 3.8rem);
+  --text-lead:  1.18rem;
+  --text-label: 0.72rem;
+
+  --radius-sm:    6px;
+  --radius-brand: 7px;
+
+  --shadow-offset:     6px 6px 0 var(--color-accent);
+  --shadow-offset-ink: 6px 6px 0 var(--color-ink);
+  --shadow-offset-lg:  9px 9px 0 var(--color-ink);
+  --shadow-offset-sm:  4px 4px 0 var(--color-ink);
+  --shadow-offset-active: 2px 2px 0 var(--color-ink);
+  --font-wordmark: 'Archivo', system-ui, sans-serif;
+
+  --ease-draw: cubic-bezier(.7, 0, .3, 1);
+  --ease-rise: cubic-bezier(.2, .7, .2, 1);
+}

@@ -1,0 +1,114 @@
+{
+  "name": "Tatame0 — Technical Blueprint",
+  "description": "Red & white, bold, wireframe design system. White paper dominates; red is the only accent (CTAs, line-art, construction marks); black ink carries text and structure. Hard corners, solid offset shadows, deliberate lines.",
+  "colorScheme": "light",
+  "color": {
+    "paper":   { "value": "#ffffff", "use": "dominant background" },
+    "ink":     { "value": "#0a0a0a", "use": "text and structural lines" },
+    "red":     { "value": "#e5121f", "use": "the accent — CTAs, line-art, marks" },
+    "redDeep": { "value": "#a60a14", "use": "pressed state / deep shadow" },
+    "redTint": { "value": "#fdeaea", "use": "faint red wash, hover fills" },
+    "grid":    { "value": "#f0e4e4", "use": "tatame background grid" },
+    "muted":   { "value": "#6b6b6b", "use": "secondary / annotation text" },
+    "onInk":   { "value": "#ffffff", "use": "text on ink/red surfaces" },
+    "onInkDim":{ "value": "#b9b9b9", "use": "dim text on ink surfaces" },
+    "amber":   { "value": "#b7791f", "use": "warning / pending states" }
+  },
+  "belts": {
+    "white":        { "hex": "#e8e8e8", "label": "White" },
+    "grey_white":   { "hex": "#d0d0d0", "label": "Grey & White" },
+    "grey":         { "hex": "#9aa0a6", "label": "Grey" },
+    "grey_black":   { "hex": "#6b6b6b", "label": "Grey & Black" },
+    "yellow_white": { "hex": "#f9e07a", "label": "Yellow & White" },
+    "yellow":       { "hex": "#f4c430", "label": "Yellow" },
+    "yellow_black": { "hex": "#c49b20", "label": "Yellow & Black" },
+    "orange_white": { "hex": "#f9c07a", "label": "Orange & White" },
+    "orange":       { "hex": "#f08c00", "label": "Orange" },
+    "orange_black": { "hex": "#c06c00", "label": "Orange & Black" },
+    "green_white":  { "hex": "#8fd48f", "label": "Green & White" },
+    "green":        { "hex": "#2e9e44", "label": "Green" },
+    "green_black":  { "hex": "#207030", "label": "Green & Black" },
+    "blue":         { "hex": "#1f6feb", "label": "Blue" },
+    "purple":       { "hex": "#8957e5", "label": "Purple" },
+    "brown":        { "hex": "#8b5a2b", "label": "Brown" },
+    "black":        { "hex": "#111317", "label": "Black" }
+  },
+  "typography": {
+    "families": {
+      "display":  "Big Shoulders Display",
+      "wordmark": "Archivo",
+      "mono":     "Space Mono",
+      "body":     "Archivo"
+    },
+    "weights": {
+      "body": 400,
+      "medium": 500,
+      "bold": 700,
+      "display": 800,
+      "black": 900
+    },
+    "scale": {
+      "hero":  "clamp(2.9rem, 7.6vw, 6rem)",
+      "h2":    "clamp(2.1rem, 5.5vw, 3.8rem)",
+      "h3":    "1.45rem",
+      "lead":  "1.18rem",
+      "body":  "1rem",
+      "sm":    "0.9rem",
+      "label": "0.72rem"
+    },
+    "leading":  { "display": 0.92, "body": 1.5 },
+    "tracking": { "display": "-0.01em", "label": "0.14em", "wordmark": "-0.055em" },
+    "labelCase": "uppercase"
+  },
+  "line":   { "default": "2.5px", "bold": "3px" },
+  "radius": { "default": "0", "sm": "6px", "brand": "7px", "badge": "15px" },
+  "border": { "default": "2.5px solid #0a0a0a", "divider": "2.5px dashed #e5121f" },
+  "shadow": {
+    "default":   "6px 6px 0 #e5121f",
+    "ink":       "6px 6px 0 #0a0a0a",
+    "hover":     "9px 9px 0 #0a0a0a",
+    "hoverRed":  "9px 9px 0 #e5121f",
+    "sm":        "4px 4px 0 #0a0a0a",
+    "active":    "2px 2px 0 #0a0a0a",
+    "note":      "solid offset only — never blurred"
+  },
+  "space": { "1": "6px", "2": "12px", "3": "22px", "4": "30px", "5": "48px", "sectionY": "74px" },
+  "layout": { "maxWidth": "1180px", "gutter": "24px", "gridCell": "44px" },
+  "motion": {
+    "ease": { "draw": "cubic-bezier(.7,0,.3,1)", "rise": "cubic-bezier(.2,.7,.2,1)" },
+    "duration": { "fast": "0.12s", "pop": "0.4s", "rise": "0.7s", "draw": "1.6s", "marquee": "28s" },
+    "reducedMotion": "all animation disabled under prefers-reduced-motion"
+  },
+  "components": {
+    "button": {
+      "font": "Big Shoulders Display",
+      "weight": 800,
+      "textTransform": "uppercase",
+      "letterSpacing": "0.02em",
+      "border": "2.5px solid #0a0a0a",
+      "radius": "0",
+      "padding": { "default": "16px 26px", "sm": "11px 16px" },
+      "primary": { "background": "#e5121f", "color": "#ffffff", "shadow": "6px 6px 0 #0a0a0a" },
+      "ghost":   { "background": "#ffffff", "color": "#0a0a0a", "shadow": "6px 6px 0 #e5121f" },
+      "hover":   { "translate": "-2px -2px", "shadow": "9px 9px 0 #0a0a0a" },
+      "active":  { "translate": "3px 3px", "shadow": "2px 2px 0 #0a0a0a" }
+    },
+    "card": {
+      "paper": { "background": "#ffffff", "border": "2.5px solid #0a0a0a", "shadow": "6px 6px 0 #e5121f" },
+      "ink":   { "background": "#0a0a0a", "border": "2.5px solid #0a0a0a", "shadow": "6px 6px 0 #e5121f", "color": "#ffffff" }
+    },
+    "field": {
+      "label": { "font": "Space Mono", "size": "0.7rem", "case": "uppercase", "color": "#6b6b6b" },
+      "input": { "background": "#ffffff", "border": "2.5px solid #0a0a0a", "color": "#0a0a0a", "focusBorder": "#e5121f", "radius": "0" }
+    }
+  },
+  "motifs": [
+    "registration crosshairs (+) at section corners",
+    "dashed red dividers between sections",
+    "mono section labels: '01 / …' and 'FIG.0X — …' with a leading red dash",
+    "blueprint dimension lines with arrowheads and mono callouts",
+    "tatame grid background at 44px",
+    "hard red/ink offset shadows that grow and shift on hover",
+    "line-art icons: 2.5px stroke, square caps, red"
+  ]
+}

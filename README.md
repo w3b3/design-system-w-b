@@ -1,10 +1,16 @@
-# w-b.dev Design System
+# w-b.dev Design System: Blueprint (v2)
 
-<img width="1097" height="495" alt="image" src="https://github.com/user-attachments/assets/ae9b5498-3d1e-42ac-a43d-e5bffdea0992" />
+A light, bold, wireframe design system for product pages, hotsites and app UIs.
 
-A dark monochrome design system for publishing single-page technical hotsites. Two typefaces. One accent color. Scroll-driven animations. Zero frameworks.
+- **Colors:** white paper, one accent, black ink.
+- **Shapes:** hard corners, and solid offset shadows that are never blurred.
+- **Fonts:** three typefaces.
 
 **Live reference:** [design.w-b.dev](https://design.w-b.dev)
+
+Blueprint came from the [tatame0](https://tatame0.com) marketing site, a gym app whose look borrows from mat grids and engineering drawings. tatame0 stays the **flagship theme**, and other projects reuse the same system by swapping one accent color.
+
+> **v1 is archived.** The original dark, monochrome w-b.dev system (Helvetica plus JetBrains Mono, amber accent) lives in [`legacy/dark-v1/`](legacy/dark-v1/). Pages already built with it keep working, because they inline their own styles.
 
 ---
 
@@ -12,145 +18,110 @@ A dark monochrome design system for publishing single-page technical hotsites. T
 
 ```
 design-system-w-b/
-  starter/
-    index.html          ← Copy this to start a new page. All tokens, all components, scroll observer included.
-  reference/
-    index.html          ← The design.w-b.dev reference page (live demo of every token and component).
-  skill/
-    SKILL.md            ← Claude Code skill definition. Install it and Claude builds pages on-system.
-  tokens.css            ← Standalone CSS custom properties — import into any project.
-  README.md             ← You are here.
+  index.html          ← The design.w-b.dev style guide: every token and component, plus a live theme/accent picker
+  tokens.css          ← Core CSS custom properties (--t-*). Import into any project.
+  themes/
+    tatame0.css       ← Tatame Red + IBJJF belt palette (flagship, default)
+    alertecole.css    ← Slate blue
+    neutral.css       ← Ink only, no color
+  starter/index.html  ← Copy this to start a new page: ticker, nav, hero, steps, cards, form, footer
+  tailwind.css        ← Tailwind v4 @theme map
+  theme.json          ← Machine-readable tokens (tooling, iOS)
+  skill/SKILL.md      ← Claude Code skill (installed as ~/.claude/skills/design-system/)
+  legacy/dark-v1/     ← The archived dark system, its reference page, starter and skill
 ```
+
+The repo root mirrors the live site, so every file above is also served at `https://design.w-b.dev/<path>`.
 
 ## Quick start
 
-### Option A: Copy the starter template
+### Option A: copy the starter
 
 ```bash
 cp starter/index.html ~/my-new-page/index.html
-# Edit the content, keep the tokens and components
 ```
 
-The starter includes every component (flow chains, cards, topology boxes, layers, maturity bars, pipeline nodes, split panels, timeline/roadmap) and the scroll observer. Delete what you don't need.
+Fix the two stylesheet links if the page lives elsewhere. Point them at `https://design.w-b.dev/tokens.css` and `https://design.w-b.dev/themes/tatame0.css`.
 
-### Option B: Import just the tokens
+### Option B: link the tokens
 
 ```html
-<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Space+Mono:wght@400;700&family=Archivo:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://design.w-b.dev/tokens.css">
+<link rel="stylesheet" href="https://design.w-b.dev/themes/tatame0.css">
 ```
 
-Or copy the `:root` block into your own `<style>`.
+### Option C: your own accent
 
-### Option C: Use with Claude Code
+Override four variables after `tokens.css`. The picker on design.w-b.dev derives them from any color and copies the CSS for you.
+
+```css
+:root {
+  --t-accent:      #2563eb;
+  --t-accent-deep: #1d4ed8;   /* pressed state, deep shadow */
+  --t-accent-tint: #eff6ff;   /* hover fill, <code> background */
+  --t-accent-grid: #e8f0fe;   /* background grid lines */
+}
+```
+
+### Option D: Tailwind v4
+
+```css
+@import "tailwindcss";
+@import "<path-to>/design-system-w-b/tailwind.css";
+@theme { --color-accent: #2563eb; }
+```
+
+### Option E: Claude Code
+
+The `design-system` skill is installed at `~/.claude/skills/design-system/`. A copy lives in `skill/` here. Ask Claude to "use the design system" or "match the style".
+
+## Principles
+
+1. **White paper dominates.** Use white surfaces with a faint 44px grid.
+2. **One accent.** Use it for CTAs, live status, line-art and construction marks. Never use it for page backgrounds or body text.
+3. **Black ink carries text and structure.** Use `#0a0a0a` with 2.5px borders.
+4. **Hard corners.** The radius is 0. Exceptions are 6px for inner elements, 7px for the logo "0", and 15px for badge caps.
+5. **Solid offset shadows.** Use `6px 6px 0` in the accent or ink. Hover lifts the element by `-2px` and grows the shadow to `9px`. Press sinks it by `3px` and shrinks the shadow to `2px`.
+6. **Light only.** Set `color-scheme: only light`. There is no dark mode.
+
+## Tokens (summary)
+
+| Token | Value (tatame0) | Use |
+|-------|-----------------|-----|
+| `--t-paper` | `#ffffff` | Page and card background |
+| `--t-ink` | `#0a0a0a` | Text, borders, structure |
+| `--t-accent` | `#e5121f` | The one accent |
+| `--t-accent-deep` | `#a60a14` | Pressed state, deep shadow |
+| `--t-accent-tint` | `#fdeaea` | Hover fill, code background |
+| `--t-accent-grid` | `#f0e4e4` | Background grid |
+| `--t-muted` | `#6b6b6b` | Secondary text, labels |
+| `--t-amber` | `#b7791f` | Pending or warning only |
+| `--t-red*`, `--t-grid` | aliases | Keep tatame0 code working unchanged |
+
+| Role | Face | Style |
+|------|------|-------|
+| Display | Big Shoulders Display 800/900 | Uppercase, leading .92. Hero `clamp(2.9rem,7.6vw,6rem)` |
+| Mono | Space Mono 700 | Uppercase, tracking .14–.18em, .72rem. Kickers, labels, FIG tags |
+| Body | Archivo 400–700 | Leading 1.5. Lead 1.18rem/500 |
+| Wordmark | Archivo 900 | Lowercase, tracking -.055em |
+
+The full spec, including belt colors, motifs and the SwiftUI guide, is in `tokens.css`, the style guide, and tatame0's `design-system/README.md`.
+
+## Deploy
+
+design.w-b.dev is a static site on rv415 (`~/sites/design.w-b.dev`), behind the rv415 Cloudflare tunnel.
 
 ```bash
-# Install the skill (one-time)
-cp -r skill/ ~/.claude/skills/design-system/
-
-# Then in any Claude Code session:
-# /design-system
-# or just ask Claude to "build a page following the design system"
+rsync -av --delete --exclude .git --exclude .claude --exclude 'legacy/dark-v1/wb-design-system-workspace' \
+  ./ rv415:~/sites/design.w-b.dev/
 ```
 
-## Design tokens
+## Related repos
 
-### Colors
+- **`tatame0/design-system/`:** the tatame0 product's own copy, imported by its web, kiosk and iOS code. Changes to the core system should flow both ways.
+- **`ds-blueprint/`:** the first extraction (June 2026). This repo has replaced it.
 
-| Token | Value | Use |
-|-------|-------|-----|
-| `--bg` | `#0e0e0e` | Page background |
-| `--bg2` | `#141414` | Card/component background |
-| `--fg` | `#f3f1ec` | Primary text — warm paper, never `#fff` |
-| `--dim` | `fg @ 0.35` | Body text, labels, secondary content |
-| `--dimmer` | `fg @ 0.15` | Meta labels, timestamps, subtle borders |
-| `--hair` | `fg @ 0.08` | Card edges, dividers |
-| `--accent` | `#d4a853` | Highlights, alerts, active states |
-| `--accent-dim` | `accent @ 0.3` | Accent borders, hover states |
+---
 
-**Core rule:** hierarchy through opacity, not hue. Never introduce additional colors.
-
-### Typography
-
-| Role | Face | Weight | Size | Tracking |
-|------|------|--------|------|----------|
-| Display / H1 | Helvetica | 700 | clamp(42px, 6vw, 72px) | -0.04em |
-| Section / H2 | Helvetica | 700 | clamp(24px, 3.5vw, 40px) | -0.03em |
-| Sub / H3 | Helvetica | 700 | clamp(18px, 2.5vw, 28px) | -0.02em |
-| Body | Helvetica | 400 | clamp(16px, 1.6vw, 19px) | normal |
-| Label | JetBrains Mono | 400 | 11px | 0.18em |
-| Data | JetBrains Mono | 400 | 12-13px | 0.02em |
-| Meta | JetBrains Mono | 400 | 10px | 0.16em |
-
-Two typefaces. No exceptions. Tighter tracking = larger type. Wider tracking = smaller type.
-
-### Spacing
-
-| Context | Value |
-|---------|-------|
-| Section padding | 120px 60px (desktop), 80px 24px (mobile) |
-| Narrow container | max-width: 900px |
-| Wide container | max-width: 1400px |
-| Component gap | 50-60px |
-| Card padding | 24-28px |
-| Grid gap | 24px |
-
-## Components
-
-All components follow the same reveal pattern: hidden by default (`opacity:0; transform:translateY(30px)`), revealed when their section enters the viewport via IntersectionObserver.
-
-| Component | Class | Description |
-|-----------|-------|-------------|
-| Flow Chain | `.flow-chain` > `.flow-step` | Vertical step sequence, border-left guide, `.highlight` accent |
-| Card Grid | `.card-grid` > `.card` | Content cards, `.accent-card` variant |
-| Topology Box | `.topo-box` > `.topo-items` > `.topo-item` | Floating label, tag pills, `.hot` accent |
-| Stacked Layers | `.layers` > `.layer` | Hierarchical depth, `.hot` for emphasis |
-| Maturity Bar | `.maturity` > `.mat-level` | Numbered progress levels, `.current` for active |
-| Pipeline Nodes | `.node-row` > `.node` | Circle nodes, `.filled` / `.accent` variants |
-| Split Panels | `.split` > `.split-panel` | Side-by-side comparison, `.old` / `.new` |
-| Roadmap | `.roadmap` > `.phase` | Timeline with dot markers |
-
-## Animation
-
-One pattern: scroll-driven reveals via IntersectionObserver. No animation libraries.
-
-```js
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add('visible');
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
-document.querySelectorAll('.section').forEach(s => observer.observe(s));
-```
-
-Child elements stagger via `transition-delay: nth-child * 0.1s`.
-
-## Page structure
-
-Every page follows this skeleton:
-
-1. **Hero** — title, subtitle, visual. No reveal animation (immediately visible).
-2. **Numbered sections** — `.label` ("01 // Name"), `.divider`, `h2`, `.body`, then components.
-3. **Outro** — summary statement + author attribution.
-
-## Anti-patterns
-
-- No pure white (`#fff`) — use `--fg` (`#f3f1ec`)
-- No additional colors beyond `--accent`
-- No CSS frameworks, no Tailwind, no Bootstrap
-- No React/Vue/Svelte — vanilla HTML + CSS + JS
-- No external JS dependencies
-- No rounded corners on cards — square edges only
-- No gradients, no shadows (except animated canvas pieces)
-- No emoji in the design
-
-## Sites using this system
-
-| URL | Type |
-|-----|------|
-| [pipeline-deep-dive.w-b.dev](https://pipeline-deep-dive.w-b.dev) | Interactive longform (reference implementation) |
-| [xdr-animated.w-b.dev](https://xdr-animated.w-b.dev) | 45s React animation |
-| [design.w-b.dev](https://design.w-b.dev) | This design system |
-
-## Author
-
-[Daniel Brasileiro](https://linkedin.com/in/brasileiro)
+Daniel Brasileiro · [linkedin.com/in/brasileiro](https://linkedin.com/in/brasileiro)
