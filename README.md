@@ -120,7 +120,7 @@ rsync -av --delete --exclude .git --exclude .claude --exclude 'legacy/dark-v1/wb
 ## Related repos
 
 - **`tatame0/design-system/`:** the tatame0 product's own copy, imported by its web, kiosk and iOS code. Changes to the core system should flow both ways.
-- **`ds-blueprint/`:** the first extraction (June 2026). This repo has replaced it.
+- **`ds-blueprint/`:** the first extraction (June 2026), archived on GitHub. This repo has replaced it.
 
 ---
 
